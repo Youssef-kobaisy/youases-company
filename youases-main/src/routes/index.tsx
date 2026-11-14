@@ -1,4 +1,4 @@
-import { useState, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import {
   ArrowDownRight,
   ArrowUpRight,
@@ -44,20 +44,37 @@ const socialLinks = [
 
 export default function App() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [path, setPath] = useState(() => window.location.pathname);
   useReveal();
+  useEffect(() => {
+    const onPopState = () => setPath(window.location.pathname);
+    window.addEventListener("popstate", onPopState);
+    return () => window.removeEventListener("popstate", onPopState);
+  }, []);
+  function navigate(to: string) {
+    window.history.pushState({}, "", to);
+    setPath(to);
+    setMenuOpen(false);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+  const page = ["/company", "/platforms", "/journal", "/contact"].includes(path)
+    ? path
+    : "/";
 
   return (
     <div className="min-h-screen overflow-hidden bg-[#050b18] text-white">
-      <Nav menuOpen={menuOpen} setMenuOpen={setMenuOpen} />
+      <Nav
+        menuOpen={menuOpen}
+        setMenuOpen={setMenuOpen}
+        currentPath={page}
+        navigate={navigate}
+      />
       <main>
-        <Hero />
-        <SignalBar />
-        <Manifesto />
-        <Intelligence />
-        <YNote />
-        <Work />
-        <News />
-        <Invitation />
+        {page === "/" && <HomePage navigate={navigate} />}
+        {page === "/company" && <CompanyPage navigate={navigate} />}
+        {page === "/platforms" && <PlatformsPage navigate={navigate} />}
+        {page === "/journal" && <JournalPage />}
+        {page === "/contact" && <Invitation />}
       </main>
       <Footer />
     </div>
@@ -67,20 +84,26 @@ export default function App() {
 function Nav({
   menuOpen,
   setMenuOpen,
+  currentPath,
+  navigate,
 }: {
   menuOpen: boolean;
   setMenuOpen: (open: boolean) => void;
+  currentPath: string;
+  navigate: (to: string) => void;
 }) {
   const links = [
-    ["The company", "#company"],
-    ["Intelligence", "#intelligence"],
-    ["Our work", "#work"],
-    ["Journal", "#journal"],
+    ["Company", "/company"],
+    ["Platforms", "/platforms"],
+    ["Journal", "/journal"],
   ];
   return (
     <header className="fixed inset-x-0 top-0 z-50 px-4 pt-4 sm:px-7">
       <div className="mx-auto flex max-w-[1400px] items-center justify-between rounded-full border border-white/10 bg-[#071226]/75 px-4 py-3 backdrop-blur-2xl sm:px-6">
-        <a href="#top" className="flex items-center gap-3">
+        <button
+          onClick={() => navigate("/")}
+          className="flex items-center gap-3"
+        >
           <img
             src={logo}
             alt="YouAses"
@@ -89,20 +112,24 @@ function Nav({
           <span className="font-display text-lg font-bold tracking-tight">
             You<span className="text-[#82aaff]">Ases</span>
           </span>
-        </a>
+        </button>
         <nav className="hidden items-center gap-9 md:flex">
           {links.map(([label, href]) => (
-            <a key={href} href={href} className="nav-link">
+            <button
+              key={href}
+              onClick={() => navigate(href)}
+              className={`nav-link ${currentPath === href ? "nav-link-active" : ""}`}
+            >
               {label}
-            </a>
+            </button>
           ))}
         </nav>
-        <a
-          href="#contact"
+        <button
+          onClick={() => navigate("/contact")}
           className="hidden items-center gap-2 rounded-full bg-white px-5 py-2.5 text-sm font-bold text-[#071226] transition hover:bg-[#9ac7ff] sm:inline-flex"
         >
           Start a conversation <ArrowUpRight size={15} />
-        </a>
+        </button>
         <button
           onClick={() => setMenuOpen(!menuOpen)}
           className="rounded-full p-2 text-slate-200 sm:hidden"
@@ -114,22 +141,193 @@ function Nav({
       {menuOpen && (
         <nav className="mx-1 mt-2 rounded-3xl border border-white/10 bg-[#071226]/95 p-3 backdrop-blur-xl sm:hidden">
           {links.map(([label, href]) => (
-            <a
+            <button
               key={href}
-              href={href}
-              onClick={() => setMenuOpen(false)}
-              className="block rounded-2xl px-4 py-3 text-sm text-slate-300 hover:bg-white/5"
+              onClick={() => navigate(href)}
+              className={`block w-full rounded-2xl px-4 py-3 text-left text-sm text-slate-300 hover:bg-white/5 ${currentPath === href ? "bg-white/5 text-white" : ""}`}
             >
               {label}
-            </a>
+            </button>
           ))}
+          <button
+            onClick={() => navigate("/contact")}
+            className="mt-1 block w-full rounded-2xl bg-white px-4 py-3 text-left text-sm font-semibold text-[#071226]"
+          >
+            Start a conversation
+          </button>
         </nav>
       )}
     </header>
   );
 }
 
-function Hero() {
+function HomePage({ navigate }: { navigate: (to: string) => void }) {
+  return (
+    <>
+      <Hero navigate={navigate} />
+      <HomeIntro navigate={navigate} />
+      <YNote navigate={navigate} />
+      <NewsPreview navigate={navigate} />
+      <Invitation />
+    </>
+  );
+}
+
+function CompanyPage({ navigate }: { navigate: (to: string) => void }) {
+  return (
+    <>
+      <PageIntro
+        eyebrow="The company"
+        title={
+          <>
+            Technology with
+            <br />
+            <span className="text-gradient">a point of view.</span>
+          </>
+        }
+        copy="YouAses is an AI-first technology company building the systems, software, and knowledge platforms that make the next era more useful."
+      />
+      <Manifesto />
+      <Intelligence />
+      <Work navigate={navigate} />
+    </>
+  );
+}
+
+function PlatformsPage({ navigate }: { navigate: (to: string) => void }) {
+  return (
+    <>
+      <PageIntro
+        eyebrow="Platforms & initiatives"
+        title={
+          <>
+            The ideas we are
+            <br />
+            <span className="text-gradient">turning into reality.</span>
+          </>
+        }
+        copy="Some are already taking shape. Others are still being named. Every initiative starts with the same ambition: expand what people can understand and create."
+      />
+      <Intelligence />
+      <YNote navigate={navigate} />
+      <Work navigate={navigate} />
+    </>
+  );
+}
+
+function JournalPage() {
+  return (
+    <>
+      <PageIntro
+        eyebrow="YouAses Journal"
+        title={
+          <>
+            Signals from
+            <br />
+            <span className="text-gradient">the studio.</span>
+          </>
+        }
+        copy="A living record of the questions, systems, and ambitious experiments guiding YouAses forward."
+      />
+      <News />
+    </>
+  );
+}
+
+function PageIntro({
+  eyebrow,
+  title,
+  copy,
+}: {
+  eyebrow: string;
+  title: ReactNode;
+  copy: string;
+}) {
+  return (
+    <section className="page-intro px-5 pb-24 pt-44 sm:px-8 sm:pb-32">
+      <div className="mx-auto max-w-[1400px]">
+        <div className="reveal eyebrow">{eyebrow}</div>
+        <h1 className="reveal mt-6 max-w-5xl font-display text-5xl font-medium leading-[.9] tracking-[-.07em] sm:text-8xl">
+          {title}
+        </h1>
+        <p className="reveal mt-8 max-w-2xl text-lg leading-8 text-slate-400 sm:text-xl">
+          {copy}
+        </p>
+      </div>
+    </section>
+  );
+}
+
+function HomeIntro({ navigate }: { navigate: (to: string) => void }) {
+  return (
+    <section className="border-y border-white/10 px-5 py-20 sm:px-8 sm:py-28">
+      <div className="mx-auto grid max-w-[1400px] gap-10 lg:grid-cols-[1fr_.65fr] lg:items-end">
+        <div>
+          <div className="eyebrow">01 / The signal</div>
+          <h2 className="mt-5 max-w-3xl font-display text-4xl leading-[.98] tracking-[-.05em] sm:text-6xl">
+            We make advanced technology feel{" "}
+            <span className="text-gradient">human.</span>
+          </h2>
+        </div>
+        <div>
+          <p className="text-base leading-8 text-slate-400">
+            YouAses creates AI systems, software, and knowledge platforms for
+            people who are ready to move first.
+          </p>
+          <button
+            onClick={() => navigate("/company")}
+            className="mt-7 inline-flex items-center gap-2 text-sm font-semibold text-[#9fc3ff]"
+          >
+            Meet the company <ArrowUpRight size={16} />
+          </button>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function NewsPreview({ navigate }: { navigate: (to: string) => void }) {
+  return (
+    <section className="px-5 py-24 sm:px-8 sm:py-32">
+      <div className="mx-auto max-w-[1400px]">
+        <div className="flex items-end justify-between gap-5">
+          <div>
+            <div className="eyebrow">02 / From the studio</div>
+            <h2 className="mt-4 font-display text-4xl tracking-[-.04em] sm:text-6xl">
+              What&apos;s taking shape.
+            </h2>
+          </div>
+          <button
+            onClick={() => navigate("/journal")}
+            className="hidden items-center gap-2 text-sm font-semibold text-[#9fc3ff] sm:inline-flex"
+          >
+            Open Journal <MoveUpRight size={16} />
+          </button>
+        </div>
+        <div className="mt-10 grid gap-5 md:grid-cols-3">
+          <NewsCard
+            date="Coming soon / 01"
+            title="Y-note is getting ready to open its first door."
+            copy="A new environment for ideas, context, and discovery."
+            featured
+          />
+          <NewsCard
+            date="The long horizon / 02"
+            title="We are building an intelligence layer of our own."
+            copy="A different approach to software that understands direction."
+          />
+          <NewsCard
+            date="Studio notes / 03"
+            title="The quiet revolution is already underway."
+            copy="Why the next interface may feel less like a machine."
+          />
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function Hero({ navigate }: { navigate: (to: string) => void }) {
   return (
     <section
       id="top"
@@ -154,8 +352,8 @@ function Hero() {
             humanity move through the next era with more clarity.
           </p>
           <div className="reveal mt-10 flex flex-wrap items-center gap-4">
-            <a
-              href="#company"
+            <button
+              onClick={() => navigate("/company")}
               className="group inline-flex items-center gap-3 rounded-full bg-[#82aaff] px-6 py-3.5 text-sm font-bold text-[#061125] transition hover:-translate-y-1 hover:bg-white"
             >
               Enter YouAses{" "}
@@ -163,13 +361,13 @@ function Hero() {
                 size={17}
                 className="transition group-hover:translate-y-1"
               />
-            </a>
-            <a
-              href="#y-note"
+            </button>
+            <button
+              onClick={() => navigate("/platforms")}
               className="inline-flex items-center gap-2 px-4 py-3.5 text-sm font-semibold text-slate-300 hover:text-white"
             >
               See what&apos;s forming <MoveUpRight size={16} />
-            </a>
+            </button>
           </div>
         </div>
         <div className="reveal relative hidden min-h-[410px] lg:block">
@@ -330,7 +528,7 @@ function Intelligence() {
   );
 }
 
-function YNote() {
+function YNote({ navigate }: { navigate: (to: string) => void }) {
   return (
     <section
       id="y-note"
@@ -360,12 +558,12 @@ function YNote() {
             and turn information into momentum.
           </p>
           <div className="reveal mt-9 flex items-center gap-4">
-            <a
-              href="#contact"
+            <button
+              onClick={() => navigate("/contact")}
               className="inline-flex items-center gap-2 rounded-full bg-white px-6 py-3.5 text-sm font-bold text-[#071226] hover:bg-[#9ac7ff]"
             >
               Get the first signal <ArrowUpRight size={16} />
-            </a>
+            </button>
             <span className="text-xs uppercase tracking-[.18em] text-slate-600">
               In development / 2026
             </span>
@@ -401,7 +599,7 @@ function YNote() {
   );
 }
 
-function Work() {
+function Work({ navigate }: { navigate: (to: string) => void }) {
   const projects = [
     {
       number: "01",
@@ -439,12 +637,12 @@ function Work() {
               </>
             }
           />
-          <a
-            href="#contact"
+          <button
+            onClick={() => navigate("/contact")}
             className="reveal inline-flex items-center gap-2 text-sm font-semibold text-[#9fc3ff]"
           >
             Explore our thinking <MoveUpRight size={16} />
-          </a>
+          </button>
         </div>
         <div className="mt-16 space-y-5">
           {projects.map((project) => (

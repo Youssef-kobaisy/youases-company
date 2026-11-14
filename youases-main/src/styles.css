@@ -68,6 +68,9 @@
   .nav-link:hover::after {
     width: 100%;
   }
+  .nav-link-active {
+    color: white;
+  }
   .eyebrow {
     color: #82aaff;
     font-size: 0.68rem;
