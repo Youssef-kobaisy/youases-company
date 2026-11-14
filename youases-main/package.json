@@ -7,6 +7,7 @@
     "dev": "vite",
     "build": "vite build && node scripts/prepare-routes.mjs && node scripts/prepare-seo.mjs",
     "preview": "vite preview",
+    "firebase:rules": "npx firebase-tools deploy --only firestore:rules --config ../firebase.json",
     "lint": "eslint .",
     "format": "prettier --write ."
   },

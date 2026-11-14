@@ -46,6 +46,13 @@ export type JournalDocument = {
   sections: Array<{ heading: string; copy: string }>;
 };
 
+export class FirebaseWriteError extends Error {
+  constructor(message: string, options?: { cause?: unknown }) {
+    super(message, options);
+    this.name = "FirebaseWriteError";
+  }
+}
+
 function toJournalDocument(data: DocumentData, fallbackSlug: string) {
   return {
     slug: data.slug ?? fallbackSlug,
@@ -87,9 +94,10 @@ export async function saveSubscriber(email: string) {
         createdAt: serverTimestamp(),
       });
     } catch (sdkError) {
-      throw new Error("Unable to save subscriber in Firestore.", {
-        cause: sdkError ?? restError,
-      });
+      throw new FirebaseWriteError(
+        "Firestore rejected the subscriber write. Deploy firestore.rules and verify the Firebase project settings.",
+        { cause: sdkError ?? restError },
+      );
     }
   }
 }

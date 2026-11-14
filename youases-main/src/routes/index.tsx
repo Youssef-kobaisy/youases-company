@@ -1496,10 +1496,12 @@ function Invitation({ standalone = false }: { standalone?: boolean }) {
   const [status, setStatus] = useState<"idle" | "saving" | "success" | "error">(
     "idle",
   );
+  const [errorMessage, setErrorMessage] = useState("");
   async function submit(event: React.FormEvent) {
     event.preventDefault();
     if (!email || status === "saving") return;
     setStatus("saving");
+    setErrorMessage("");
     try {
       const { saveSubscriber } = await import("@/lib/firebase");
       await saveSubscriber(email);
@@ -1507,6 +1509,11 @@ function Invitation({ standalone = false }: { standalone?: boolean }) {
       setStatus("success");
     } catch (error) {
       console.error("Could not save the YouAses subscriber.", error);
+      setErrorMessage(
+        error instanceof Error && error.name === "FirebaseWriteError"
+          ? "Firebase is rejecting new subscribers. The Firestore rules must be deployed."
+          : "We could not reach Firebase. Please try again in a moment.",
+      );
       setStatus("error");
     }
   }
@@ -1575,7 +1582,7 @@ function Invitation({ standalone = false }: { standalone?: boolean }) {
                 : status === "success"
                   ? "You are on the list. We will keep you close."
                   : status === "error"
-                    ? "We could not save that yet. Please try again."
+                    ? errorMessage
                     : "No noise. Only meaningful signals from YouAses."}
             </p>
           </div>
