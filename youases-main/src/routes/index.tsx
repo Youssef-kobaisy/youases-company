@@ -6,6 +6,7 @@ import {
   Facebook,
   Globe2,
   Instagram,
+  LockKeyhole,
   Linkedin,
   Mail,
   Menu,
@@ -1247,37 +1248,50 @@ function YNote({ navigate }: { navigate: (to: string) => void }) {
             <span className="text-gradient">know more.</span>
           </h2>
           <p className="reveal mt-7 max-w-xl text-lg leading-8 text-slate-400">
-            Y-note is our first doorway into a larger idea: a living knowledge
-            environment that helps you connect thought, discover relationships,
-            and turn information into momentum.
+            Y-note is the first doorway into a larger idea: a living knowledge
+            environment for connecting thought, discovering relationships, and
+            turning information into momentum.
           </p>
           <div className="reveal mt-9 flex items-center gap-4">
             <button
               onClick={() => navigate("/contact")}
               className="inline-flex items-center gap-2 rounded-full bg-white px-6 py-3.5 text-sm font-bold text-[#071226] hover:bg-[#9ac7ff]"
             >
-              Get the first signal <ArrowUpRight size={16} />
+              Join the first signal <ArrowUpRight size={16} />
             </button>
             <span className="text-xs uppercase tracking-[.18em] text-slate-600">
-              In development / 2026
+              Coming soon / private build
             </span>
           </div>
         </div>
         <div className="reveal relative mx-auto aspect-[.82] w-full max-w-[430px]">
           <div className="absolute inset-0 rotate-6 rounded-[2.6rem] border border-[#82aaff]/20 bg-[#0b1c39]/70 shadow-[0_30px_100px_rgba(0,0,0,.4)]" />
-          <div className="absolute inset-5 -rotate-3 rounded-[2.3rem] border border-white/10 bg-[#071329] p-6 shadow-2xl sm:p-8">
-            <div className="flex items-center justify-between text-[10px] uppercase tracking-[.28em] text-slate-600">
-              <span>Y-note / 01</span>
+          <div className="absolute inset-5 -rotate-3 overflow-hidden rounded-[2.3rem] border border-white/10 bg-[#071329] p-6 shadow-2xl sm:p-8">
+            <div className="flex items-center justify-between text-[10px] uppercase tracking-[.28em] text-slate-500">
+              <span>Y-note / Private build</span>
               <span className="flex items-center gap-2">
-                <i className="h-1.5 w-1.5 rounded-full bg-cyan-300" /> Live idea
+                <i className="h-1.5 w-1.5 rounded-full bg-amber-300" /> Locked
               </span>
             </div>
-            <div className="mt-24 font-display text-4xl leading-[.95] tracking-[-.05em] sm:text-5xl">
-              The future
-              <br />
-              <span className="text-[#82aaff]">is connected.</span>
+            <div className="relative mt-20">
+              <div className="font-display text-4xl leading-[.95] tracking-[-.05em] blur-[5px] select-none sm:text-5xl">
+                The future
+                <br />
+                <span className="text-[#82aaff]">is connected.</span>
+              </div>
+              <div className="absolute inset-0 flex flex-col items-center justify-center bg-[#071329]/55 text-center backdrop-blur-[2px]">
+                <span className="flex h-14 w-14 items-center justify-center rounded-full border border-[#82aaff]/40 bg-[#0b1d3d] text-[#9fc3ff] shadow-[0_0_35px_rgba(130,170,255,.25)]">
+                  <LockKeyhole size={22} />
+                </span>
+                <span className="mt-4 text-[10px] font-bold uppercase tracking-[.28em] text-white">
+                  Coming soon
+                </span>
+                <span className="mt-2 text-xs text-slate-500">
+                  The first door opens soon.
+                </span>
+              </div>
             </div>
-            <div className="mt-20 space-y-3">
+            <div className="mt-16 space-y-3 opacity-40">
               <div className="h-1.5 w-28 rounded-full bg-[#82aaff]" />
               <div className="h-1.5 w-48 rounded-full bg-white/10" />
               <div className="h-1.5 w-36 rounded-full bg-white/10" />
