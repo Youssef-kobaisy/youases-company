@@ -71,6 +71,87 @@
   .nav-link-active {
     color: white;
   }
+  .vertical-word {
+    color: #64748b;
+    font-family: "Space Grotesk", Inter, sans-serif;
+    font-size: 0.6rem;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+  }
+  .side-nav-link {
+    display: flex;
+    width: 40px;
+    height: 40px;
+    align-items: center;
+    justify-content: center;
+    border-radius: 999px;
+    color: #64748b;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 0.65rem;
+    transition:
+      color 0.25s ease,
+      background 0.25s ease,
+      transform 0.25s ease;
+  }
+  .side-nav-link:hover,
+  .side-nav-link-active {
+    color: white;
+    background: rgba(130, 170, 255, 0.16);
+    transform: scale(1.08);
+  }
+  .side-contact {
+    display: flex;
+    width: 40px;
+    height: 40px;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(130, 170, 255, 0.35);
+    border-radius: 999px;
+    color: #82aaff;
+    transition:
+      color 0.25s ease,
+      background 0.25s ease;
+  }
+  .side-contact:hover {
+    color: #071226;
+    background: #fff;
+  }
+  .mobile-header,
+  .mobile-menu {
+    box-shadow: 0 20px 70px rgba(0, 0, 0, 0.25);
+  }
+  .story-card {
+    min-height: 270px;
+    padding: 1.75rem;
+    background: #091226;
+  }
+  .story-card:nth-child(2) {
+    background: #0c1932;
+  }
+  .story-card:nth-child(3) {
+    background: #0b2030;
+  }
+  .feature-article {
+    min-height: 450px;
+    padding: 2rem;
+    border: 1px solid rgba(130, 170, 255, 0.25);
+    border-radius: 2rem;
+    background: linear-gradient(
+      140deg,
+      rgba(42, 91, 187, 0.28),
+      rgba(255, 255, 255, 0.025)
+    );
+  }
+  .feature-article-alt {
+    border-color: rgba(100, 220, 230, 0.22);
+    background: linear-gradient(
+      140deg,
+      rgba(11, 92, 112, 0.32),
+      rgba(255, 255, 255, 0.025)
+    );
+  }
   .eyebrow {
     color: #82aaff;
     font-size: 0.68rem;
@@ -174,6 +255,10 @@
   }
   .news-card {
     padding: 2rem;
+  }
+  .story-card,
+  .feature-article {
+    padding: 2.5rem;
   }
 }
 

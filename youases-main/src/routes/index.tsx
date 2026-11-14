@@ -93,13 +93,47 @@ function Nav({
   navigate: (to: string) => void;
 }) {
   const links = [
+    ["Home", "/"],
     ["Company", "/company"],
     ["Platforms", "/platforms"],
     ["Journal", "/journal"],
   ];
   return (
-    <header className="fixed inset-x-0 top-0 z-50 px-4 pt-4 sm:px-7">
-      <div className="mx-auto flex max-w-[1400px] items-center justify-between rounded-full border border-white/10 bg-[#071226]/75 px-4 py-3 backdrop-blur-2xl sm:px-6">
+    <>
+      <header className="side-rail fixed left-4 top-4 z-50 hidden h-[calc(100vh-2rem)] w-[76px] flex-col items-center justify-between rounded-[2rem] border border-white/10 bg-[#071226]/70 py-5 backdrop-blur-2xl lg:flex">
+        <button
+          onClick={() => navigate("/")}
+          className="flex flex-col items-center gap-2"
+        >
+          <img
+            src={logo}
+            alt="YouAses"
+            className="h-10 w-10 rounded-xl object-cover shadow-[0_0_30px_rgba(87,151,255,.4)]"
+          />
+          <span className="vertical-word">YouAses</span>
+        </button>
+        <nav className="flex flex-col items-center gap-4">
+          {links.map(([label, href], index) => (
+            <button
+              key={href}
+              onClick={() => navigate(href)}
+              className={`side-nav-link ${currentPath === href ? "side-nav-link-active" : ""}`}
+              aria-label={label}
+              title={label}
+            >
+              <span>0{index + 1}</span>
+            </button>
+          ))}
+        </nav>
+        <button
+          onClick={() => navigate("/contact")}
+          className="side-contact"
+          aria-label="Contact YouAses"
+        >
+          <Mail size={17} />
+        </button>
+      </header>
+      <header className="mobile-header fixed inset-x-4 top-4 z-50 flex items-center justify-between rounded-full border border-white/10 bg-[#071226]/80 px-4 py-3 backdrop-blur-2xl lg:hidden">
         <button
           onClick={() => navigate("/")}
           className="flex items-center gap-3"
@@ -107,28 +141,11 @@ function Nav({
           <img
             src={logo}
             alt="YouAses"
-            className="h-9 w-9 rounded-xl object-cover shadow-[0_0_30px_rgba(87,151,255,.4)]"
+            className="h-9 w-9 rounded-xl object-cover"
           />
-          <span className="font-display text-lg font-bold tracking-tight">
+          <span className="font-display text-lg font-bold">
             You<span className="text-[#82aaff]">Ases</span>
           </span>
-        </button>
-        <nav className="hidden items-center gap-9 md:flex">
-          {links.map(([label, href]) => (
-            <button
-              key={href}
-              onClick={() => navigate(href)}
-              className={`nav-link ${currentPath === href ? "nav-link-active" : ""}`}
-            >
-              {label}
-            </button>
-          ))}
-        </nav>
-        <button
-          onClick={() => navigate("/contact")}
-          className="hidden items-center gap-2 rounded-full bg-white px-5 py-2.5 text-sm font-bold text-[#071226] transition hover:bg-[#9ac7ff] sm:inline-flex"
-        >
-          Start a conversation <ArrowUpRight size={15} />
         </button>
         <button
           onClick={() => setMenuOpen(!menuOpen)}
@@ -137,9 +154,9 @@ function Nav({
         >
           {menuOpen ? <X size={21} /> : <Menu size={21} />}
         </button>
-      </div>
+      </header>
       {menuOpen && (
-        <nav className="mx-1 mt-2 rounded-3xl border border-white/10 bg-[#071226]/95 p-3 backdrop-blur-xl sm:hidden">
+        <nav className="mobile-menu fixed inset-x-4 top-20 z-50 rounded-3xl border border-white/10 bg-[#071226]/95 p-3 backdrop-blur-xl lg:hidden">
           {links.map(([label, href]) => (
             <button
               key={href}
@@ -157,7 +174,7 @@ function Nav({
           </button>
         </nav>
       )}
-    </header>
+    </>
   );
 }
 
@@ -185,9 +202,10 @@ function CompanyPage({ navigate }: { navigate: (to: string) => void }) {
             <span className="text-gradient">a point of view.</span>
           </>
         }
-        copy="YouAses is an AI-first technology company building the systems, software, and knowledge platforms that make the next era more useful."
+        copy="YouAses is an AI-first technology company building intelligent software and knowledge platforms for people and organizations shaping what comes next."
       />
       <Manifesto />
+      <CompanyStory />
       <Intelligence />
       <Work navigate={navigate} />
     </>
@@ -230,6 +248,7 @@ function JournalPage() {
         copy="A living record of the questions, systems, and ambitious experiments guiding YouAses forward."
       />
       <News />
+      <JournalFeature />
     </>
   );
 }
@@ -449,17 +468,65 @@ function Manifesto() {
           />
           <div>
             <p className="reveal text-2xl leading-[1.35] text-slate-200 sm:text-4xl">
-              The world does not need more software. It needs better ways to
-              understand, decide, and create.
+              YouAses exists to turn machine intelligence into human
+              possibility.
             </p>
             <p className="reveal mt-8 max-w-2xl text-base leading-8 text-slate-500">
-              YouAses is an AI-first technology company building the connective
-              tissue between human curiosity and machine intelligence. We are
-              here to make the future feel less distant — and more usable.
+              We are not building technology for the sake of novelty. We are
+              building the layer between a difficult question and a better
+              answer: systems that understand context, software that creates
+              momentum, and products that give ambitious people more room to
+              think.
             </p>
             <div className="reveal mt-10 flex items-center gap-4 text-sm text-[#9fc3ff]">
               <Quote size={20} /> Because you are Aces.
             </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function CompanyStory() {
+  const chapters = [
+    [
+      "01",
+      "The question",
+      "What if advanced technology felt less like a tool you operate and more like an intelligence you could think with?",
+    ],
+    [
+      "02",
+      "The discipline",
+      "We bring together AI, product engineering, and editorial clarity — because powerful systems only matter when people can use them with confidence.",
+    ],
+    [
+      "03",
+      "The horizon",
+      "Our ambition is to create a family of platforms that expands access to understanding, helping more people learn faster, build boldly, and see further.",
+    ],
+  ];
+  return (
+    <section className="company-story px-5 py-20 sm:px-8 sm:py-32">
+      <div className="mx-auto max-w-[1400px]">
+        <div className="grid gap-8 lg:grid-cols-[.55fr_1.45fr]">
+          <div>
+            <div className="eyebrow">The YouAses point of view</div>
+            <h2 className="mt-5 max-w-sm font-display text-4xl leading-[.98] tracking-[-.05em] sm:text-6xl">
+              Build the layer people{" "}
+              <span className="text-gradient">build on.</span>
+            </h2>
+          </div>
+          <div className="grid gap-px overflow-hidden rounded-3xl border border-white/10 bg-white/10 md:grid-cols-3">
+            {chapters.map(([number, title, copy]) => (
+              <article key={number} className="story-card">
+                <span className="font-mono text-xs text-[#82aaff]">
+                  {number}
+                </span>
+                <h3 className="mt-16 font-display text-xl">{title}</h3>
+                <p className="mt-4 text-sm leading-7 text-slate-500">{copy}</p>
+              </article>
+            ))}
           </div>
         </div>
       </div>
@@ -713,6 +780,48 @@ function News() {
             title="The quiet revolution is already underway."
             copy="A field note on designing AI systems that feel less like machines and more like extensions of human thought."
           />
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function JournalFeature() {
+  return (
+    <section className="journal-feature px-5 pb-28 sm:px-8 sm:pb-40">
+      <div className="mx-auto max-w-[1400px]">
+        <div className="eyebrow">Two ideas we are following</div>
+        <div className="mt-8 grid gap-5 lg:grid-cols-2">
+          <article className="feature-article">
+            <div className="flex items-center justify-between text-xs uppercase tracking-[.2em] text-[#82aaff]">
+              <span>Field note / 01</span>
+              <BrainCircuit size={18} />
+            </div>
+            <h2 className="mt-20 max-w-lg font-display text-3xl leading-tight tracking-[-.04em] sm:text-5xl">
+              The next generation of software will understand the space between
+              your words.
+            </h2>
+            <p className="mt-6 max-w-xl text-base leading-8 text-slate-400">
+              Interfaces are moving from commands to context. At YouAses, we are
+              exploring how AI can recognize intent, protect attention, and make
+              the right next step feel obvious.
+            </p>
+          </article>
+          <article className="feature-article feature-article-alt">
+            <div className="flex items-center justify-between text-xs uppercase tracking-[.2em] text-cyan-200">
+              <span>Studio letter / 02</span>
+              <Rocket size={18} />
+            </div>
+            <h2 className="mt-20 max-w-lg font-display text-3xl leading-tight tracking-[-.04em] sm:text-5xl">
+              We are building a doorway to knowledge, not another place to store
+              it.
+            </h2>
+            <p className="mt-6 max-w-xl text-base leading-8 text-slate-300/70">
+              Y-note is being shaped around a simple belief: the most valuable
+              ideas are not isolated. They are connected, evolving, and waiting
+              for the right system to bring them into focus.
+            </p>
+          </article>
         </div>
       </div>
     </section>
