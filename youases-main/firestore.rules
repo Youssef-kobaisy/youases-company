@@ -15,7 +15,7 @@ service cloud.firestore {
 
     match /journal/{journalId} {
       allow read: if resource.data.published == true;
-      allow write: if false;
+      allow create, update, delete: if request.auth != null;
     }
   }
 }

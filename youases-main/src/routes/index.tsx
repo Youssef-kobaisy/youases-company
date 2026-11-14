@@ -1,4 +1,5 @@
 import { useEffect, useState, type ReactNode } from "react";
+import { marked } from "marked";
 import {
   ArrowDownRight,
   ArrowUpRight,
@@ -555,11 +556,17 @@ function JournalPage({ navigate }: { navigate: (to: string) => void }) {
       active = false;
     };
   }, []);
-  const remoteOnlyStories = remoteStories.filter(
-    (remote) =>
-      !journalArticles.some((article) => article.slug === remote.slug),
+  const remoteBySlug = new Map(
+    remoteStories.map((remote) => [remote.slug, remote]),
   );
-  const visibleStories = [...remoteOnlyStories, ...stories];
+  const visibleStories = [
+    ...remoteStories.filter(
+      (remote) =>
+        !journalArticles.some((article) => article.slug === remote.slug),
+    ),
+    ...stories.map((article) => remoteBySlug.get(article.slug) ?? article),
+  ];
+  const featuredArticle = remoteBySlug.get(featured.slug) ?? featured;
   return (
     <>
       <PageIntro
@@ -577,12 +584,14 @@ function JournalPage({ navigate }: { navigate: (to: string) => void }) {
         <div className="mx-auto max-w-[1400px]">
           <div className="journal-featured">
             <div className="max-w-2xl">
-              <div className="eyebrow">Featured / {featured.category}</div>
+              <div className="eyebrow">
+                Featured article / {featuredArticle.category}
+              </div>
               <h2 className="mt-6 font-display text-4xl leading-[.98] tracking-[-.05em] sm:text-6xl">
-                {featured.title}
+                {featuredArticle.title}
               </h2>
               <p className="mt-6 text-lg leading-8 text-slate-300">
-                {featured.excerpt}
+                {featuredArticle.excerpt}
               </p>
               <button
                 onClick={() => navigate(`/journal/${featured.slug}`)}
@@ -593,18 +602,18 @@ function JournalPage({ navigate }: { navigate: (to: string) => void }) {
             </div>
             <div className="journal-featured-mark">
               <img src={appIcon} alt="Y-note" loading="lazy" decoding="async" />
-              <span>Y-note / First signal</span>
+              <span>Y-note / Featured article</span>
             </div>
           </div>
           <div className="mt-20 flex items-end justify-between gap-6">
             <div>
-              <div className="eyebrow">All stories</div>
+              <div className="eyebrow">The Journal / Articles</div>
               <h2 className="mt-4 font-display text-3xl tracking-[-.04em] sm:text-5xl">
-                Ideas worth following.
+                Ideas worth reading.
               </h2>
             </div>
             <span className="hidden text-sm text-slate-600 sm:block">
-              {visibleStories.length} stories / more to come
+              {visibleStories.length} articles / more to come
             </span>
           </div>
           <div className="mt-8 divide-y divide-white/10 border-y border-white/10">
@@ -743,19 +752,28 @@ function JournalArticlePage({
         </p>
         <div className="article-rule mt-16" />
         <div className="mt-16 max-w-2xl space-y-14">
-          {article.sections.map((section, index) => (
-            <section key={section.heading} className="reveal">
-              <div className="font-mono text-xs text-[#82aaff]">
-                0{index + 1}
-              </div>
-              <h2 className="mt-4 font-display text-3xl tracking-[-.04em] sm:text-4xl">
-                {section.heading}
-              </h2>
-              <p className="mt-5 text-base leading-8 text-slate-400">
-                {section.copy}
-              </p>
-            </section>
-          ))}
+          {"content" in article && typeof article.content === "string" ? (
+            <div
+              className="journal-markdown reveal"
+              dangerouslySetInnerHTML={{
+                __html: marked.parse(article.content),
+              }}
+            />
+          ) : null}
+          {(!("content" in article) || !article.content) &&
+            article.sections.map((section, index) => (
+              <section key={section.heading} className="reveal">
+                <div className="font-mono text-xs text-[#82aaff]">
+                  0{index + 1}
+                </div>
+                <h2 className="mt-4 font-display text-3xl tracking-[-.04em] sm:text-4xl">
+                  {section.heading}
+                </h2>
+                <p className="mt-5 text-base leading-8 text-slate-400">
+                  {section.copy}
+                </p>
+              </section>
+            ))}
         </div>
         <div className="article-cta mt-24 rounded-[2rem] p-8 sm:p-12">
           <div className="eyebrow">Stay close to the next signal</div>

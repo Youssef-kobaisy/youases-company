@@ -341,6 +341,56 @@
     padding-left: 0.75rem;
     background: rgba(130, 170, 255, 0.04);
   }
+  .journal-markdown {
+    color: #a7b3c9;
+    font-size: 1.08rem;
+    line-height: 2;
+  }
+  .journal-markdown h2,
+  .journal-markdown h3 {
+    margin: 3rem 0 1rem;
+    color: white;
+    font-family: "Space Grotesk", Inter, sans-serif;
+    line-height: 1.1;
+    letter-spacing: -0.04em;
+  }
+  .journal-markdown h2 {
+    font-size: 2rem;
+  }
+  .journal-markdown h3 {
+    font-size: 1.45rem;
+  }
+  .journal-markdown p {
+    margin: 1rem 0;
+  }
+  .journal-markdown a {
+    color: #9fc3ff;
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+  .journal-markdown pre {
+    overflow-x: auto;
+    margin: 1.5rem 0;
+    border: 1px solid rgba(130, 170, 255, 0.2);
+    border-radius: 1rem;
+    padding: 1.25rem;
+    background: #020817;
+    color: #d7e5ff;
+    font-size: 0.88rem;
+    line-height: 1.7;
+  }
+  .journal-markdown code {
+    border-radius: 0.3rem;
+    padding: 0.12rem 0.3rem;
+    background: rgba(130, 170, 255, 0.12);
+    color: #c7dcff;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 0.9em;
+  }
+  .journal-markdown pre code {
+    padding: 0;
+    background: transparent;
+  }
   .article-rule {
     height: 1px;
     background: linear-gradient(90deg, rgba(130, 170, 255, 0.8), transparent);

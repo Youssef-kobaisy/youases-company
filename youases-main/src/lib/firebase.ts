@@ -43,6 +43,7 @@ export type JournalDocument = {
   intro: string;
   published?: boolean;
   publishedAt?: unknown;
+  content?: string;
   sections: Array<{ heading: string; copy: string }>;
 };
 
@@ -63,6 +64,7 @@ function toJournalDocument(data: DocumentData, fallbackSlug: string) {
     intro: data.intro ?? data.excerpt ?? "",
     published: data.published === true,
     publishedAt: data.publishedAt,
+    content: data.content ?? "",
     sections: Array.isArray(data.sections) ? data.sections : [],
   } satisfies JournalDocument;
 }
@@ -108,9 +110,15 @@ export async function getPublishedJournalEntries() {
   );
   return entries.docs
     .map((entry) => toJournalDocument(entry.data(), entry.id))
-    .sort((a, b) =>
-      String(b.publishedAt ?? "").localeCompare(String(a.publishedAt ?? "")),
-    );
+    .sort((a, b) => {
+      const time = (value: unknown) =>
+        value &&
+        typeof value === "object" &&
+        typeof (value as { toMillis?: unknown }).toMillis === "function"
+          ? Number((value as { toMillis: () => number }).toMillis())
+          : Date.parse(String(value ?? ""));
+      return time(b.publishedAt) - time(a.publishedAt);
+    });
 }
 
 export async function getPublishedJournalEntry(slug: string) {

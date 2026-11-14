@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>YouAses Journal Editor</title>
+    <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore-compat.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked@15.0.7/marked.min.js"></script>
+    <style>
+      :root { color-scheme: dark; --bg:#050b18; --panel:#0b1730; --line:#213253; --text:#edf4ff; --muted:#8da0c0; --blue:#82aaff; --danger:#ff9daf; }
+      * { box-sizing:border-box; } body { margin:0; background:radial-gradient(circle at 80% 0%,#102b5a 0,transparent 34%),var(--bg); color:var(--text); font:15px Inter,system-ui,sans-serif; }
+      .shell { width:min(1180px,100%); margin:auto; padding:24px; } header { display:flex; justify-content:space-between; align-items:center; gap:16px; padding:20px 0 34px; } h1,h2 { margin:0; letter-spacing:-.04em; } h1 { font-size:clamp(2rem,5vw,4rem); } h2 { font-size:1.35rem; } p { color:var(--muted); line-height:1.7; } .eyebrow { color:var(--blue); font-size:11px; font-weight:700; letter-spacing:.2em; text-transform:uppercase; }
+      .panel { border:1px solid var(--line); border-radius:24px; background:rgba(11,23,48,.84); padding:22px; box-shadow:0 20px 80px #0004; } .grid { display:grid; grid-template-columns:280px 1fr; gap:18px; } .stack { display:grid; gap:12px; } label { display:grid; gap:7px; color:var(--muted); font-size:12px; } input,textarea { width:100%; border:1px solid var(--line); border-radius:12px; background:#061025; color:var(--text); padding:12px 13px; font:inherit; outline:none; } input:focus,textarea:focus { border-color:var(--blue); } textarea { min-height:340px; resize:vertical; font-family:ui-monospace,SFMono-Regular,Menlo,monospace; line-height:1.6; } button { border:0; border-radius:999px; padding:11px 16px; background:var(--blue); color:#071226; cursor:pointer; font-weight:700; } button.secondary { background:#142442; color:var(--text); } button.danger { background:transparent; color:var(--danger); border:1px solid #633143; } button:disabled { opacity:.5; cursor:wait; } .actions { display:flex; flex-wrap:wrap; gap:8px; align-items:center; } .article-item { display:grid; gap:6px; border-bottom:1px solid var(--line); padding:15px 0; cursor:pointer; } .article-item:last-child { border-bottom:0; } .article-item strong { font-size:15px; } .meta { color:var(--muted); font-size:12px; } .status { min-height:24px; color:#8ce5cb; } .error { color:var(--danger); } .preview { margin-top:14px; border-top:1px solid var(--line); padding-top:14px; color:var(--muted); line-height:1.8; } .preview h2,.preview h3 { color:var(--text); } .preview pre { overflow:auto; border-radius:10px; padding:14px; background:#020817; } .preview code { color:#c7dcff; } .hidden { display:none !important; } .auth { max-width:450px; margin:9vh auto; } @media(max-width:800px){ .grid{grid-template-columns:1fr;} header{align-items:flex-start; flex-direction:column;} .shell{padding:16px;} }
+    </style>
+  </head>
+  <body>
+    <div class="shell">
+      <section id="authView" class="panel auth">
+        <div class="eyebrow">YouAses / Private publishing</div>
+        <h1 style="margin-top:12px">Journal editor.</h1>
+        <p>Sign in with the Firebase Authentication account you created for publishing. This page never exposes public write access.</p>
+        <form id="loginForm" class="stack">
+          <label>Email<input id="loginEmail" type="email" required autocomplete="username" /></label>
+          <label>Password<input id="loginPassword" type="password" required autocomplete="current-password" /></label>
+          <button>Sign in to publish</button>
+          <div id="loginStatus" class="status"></div>
+        </form>
+      </section>
+
+      <main id="appView" class="hidden">
+        <header>
+          <div><div class="eyebrow">YouAses / Journal control room</div><h1>Publish better ideas.</h1><p>Create, preview, publish, and manage articles from your phone.</p></div>
+          <button id="logout" class="secondary">Sign out</button>
+        </header>
+        <div class="grid">
+          <aside class="panel">
+            <div class="actions" style="justify-content:space-between"><h2>Articles</h2><button id="newArticle" class="secondary">New</button></div>
+            <div id="articleList" class="stack" style="margin-top:12px"></div>
+            <button id="seedArticles" class="secondary" style="margin-top:16px;width:100%">Import the 3 existing articles</button>
+          </aside>
+          <section class="panel">
+            <form id="articleForm" class="stack">
+              <div class="actions" style="justify-content:space-between"><div class="eyebrow">Article editor</div><span id="saveStatus" class="status"></span></div>
+              <label>Slug<input id="slug" required placeholder="the-human-side-of-ai" /></label>
+              <div class="grid" style="grid-template-columns:1fr 1fr">
+                <label>Title<input id="title" required /></label>
+                <label>Category<input id="category" value="Studio note" required /></label>
+              </div>
+              <div class="grid" style="grid-template-columns:140px 1fr">
+                <label>Number<input id="number" value="04" required /></label>
+                <label>Excerpt<input id="excerpt" required maxlength="220" /></label>
+              </div>
+              <label>Markdown article<textarea id="content" required placeholder="# Your headline&#10;&#10;Write your article here.&#10;&#10;```js&#10;const idea = 'useful';&#10;```"></textarea></label>
+              <label style="display:flex;align-items:center;gap:8px"><input id="published" type="checkbox" checked style="width:auto" /> Published on youases.work</label>
+              <div class="actions"><button id="save">Save article</button><button type="button" id="delete" class="danger">Delete</button></div>
+              <div id="preview" class="preview"></div>
+            </form>
+          </section>
+        </div>
+      </main>
+    </div>
+    <script>
+      const firebaseConfig = { apiKey:"AIzaSyDQ5bxMakYqyraD7vToxgkMrpWtoOVWsX0", authDomain:"youases-website.firebaseapp.com", projectId:"youases-website", storageBucket:"youases-website.firebasestorage.app", messagingSenderId:"445503036368", appId:"1:445503036368:web:94e86eb4dfb7a7c52337d5" };
+      firebase.initializeApp(firebaseConfig);
+      const auth = firebase.auth(), db = firebase.firestore();
+      const $ = (id) => document.getElementById(id);
+      const fields = ["slug","title","category","number","excerpt","content","published"];
+      const existing = [
+        {slug:"why-we-are-building-y-note",category:"Product signal",number:"01",title:"We are building a doorway to knowledge.",excerpt:"Y-note began with a question: what if the next generation of software did more than store what you know?",content:"# We are building a doorway to knowledge.\\n\\nThe internet gave the world access to more information than any generation before it. The next challenge is making meaning from the enormous amount already around us.\\n\\n## The problem is not a blank page\\n\\nMost tools ask people to capture more, organise more, and remember more. But a growing archive is not the same as a growing mind.\\n\\n## A different kind of beginning\\n\\nY-note is being shaped around the space between a thought and its next possibility.",published:true},
+        {slug:"the-human-side-of-ai",category:"Point of view",number:"02",title:"The future of AI will be measured by what it gives back.",excerpt:"At YouAses, we are not interested in making intelligence feel louder. We are interested in making people feel more capable.",content:"# The future of AI will be measured by what it gives back.\\n\\nArtificial intelligence is often described through scale. But scale is not the measure we care about most.\\n\\n## Capability without clarity is friction\\n\\nA powerful system can still leave people overwhelmed. Technology should help people see clearly and move from intention to action.",published:true},
+        {slug:"inside-the-youases-studio",category:"Studio letter",number:"03",title:"Inside the YouAses studio: from impossible questions to useful systems.",excerpt:"Every YouAses idea starts as a question about what people could do if technology understood the direction, not just the command.",content:"# Inside the YouAses studio\\n\\nYouAses is an independent technology company, but we think like a studio: curious at the beginning, rigorous in the middle, and ambitious about the final experience.\\n\\n## Start with the human tension\\n\\nBefore a feature or roadmap, we look for the tension people are already living with.",published:true}
+      ];
+      let selected = null;
+      function setStatus(message, error=false){ $("saveStatus").textContent=message; $("saveStatus").className=error?"status error":"status"; }
+      function clearForm(){ selected=null; fields.forEach(id=>$(id).value=""); $("category").value="Studio note"; $("number").value="04"; $("published").checked=true; $("delete").disabled=true; renderPreview(); }
+      function loadForm(data){ selected=data.slug; fields.forEach(id=>{ if(id==="published") $(id).checked=data.published!==false; else $(id).value=data[id]||""; }); $("delete").disabled=false; renderPreview(); }
+      function renderPreview(){ $("preview").innerHTML=marked.parse($("content").value||"*Preview will appear here.*"); }
+      function renderList(snapshot){ $("articleList").innerHTML=""; snapshot.forEach(doc=>{ const data=doc.data(); const item=document.createElement("div"); item.className="article-item"; item.innerHTML=`<strong>${data.title||doc.id}</strong><span class="meta">${data.published?"Published":"Draft"} · ${data.category||"Article"}</span>`; item.onclick=()=>loadForm({...data,slug:data.slug||doc.id}); $("articleList").appendChild(item); }); }
+      async function refresh(){ const snapshot=await db.collection("journal").orderBy("number").get(); renderList(snapshot); }
+      $("loginForm").onsubmit=async(e)=>{e.preventDefault(); $("loginStatus").textContent="Signing in..."; try{await auth.signInWithEmailAndPassword($("loginEmail").value,$("loginPassword").value);}catch(err){$("loginStatus").textContent=err.message; $("loginStatus").className="status error";}};
+      auth.onAuthStateChanged(async(user)=>{ $("authView").classList.toggle("hidden",!!user); $("appView").classList.toggle("hidden",!user); if(user){clearForm(); try{await refresh();}catch(err){setStatus(err.message,true);}}});
+      $("logout").onclick=()=>auth.signOut(); $("newArticle").onclick=clearForm; $("content").oninput=renderPreview;
+      $("articleForm").onsubmit=async(e)=>{e.preventDefault(); const slug=$("slug").value.trim().toLowerCase().replace(/[^a-z0-9-]+/g,"-"); if(!slug)return; setStatus("Saving..."); const data={slug,title:$("title").value.trim(),category:$("category").value.trim(),number:$("number").value.trim(),excerpt:$("excerpt").value.trim(),content:$("content").value,published:$("published").checked,publishedAt:firebase.firestore.FieldValue.serverTimestamp(),updatedAt:firebase.firestore.FieldValue.serverTimestamp()}; try{await db.collection("journal").doc(slug).set(data,{merge:true}); selected=slug; $("slug").value=slug; setStatus("Saved and synced."); await refresh();}catch(err){setStatus(err.message,true);}};
+      $("delete").onclick=async()=>{if(!selected||!confirm("Delete this article?"))return; try{await db.collection("journal").doc(selected).delete(); clearForm(); setStatus("Deleted."); await refresh();}catch(err){setStatus(err.message,true);}};
+      $("seedArticles").onclick=async()=>{if(!confirm("Import the 3 existing articles into Firestore?"))return; setStatus("Importing..."); try{const batch=db.batch(); existing.forEach(item=>batch.set(db.collection("journal").doc(item.slug),{...item,publishedAt:firebase.firestore.Timestamp.now(),updatedAt:firebase.firestore.Timestamp.now()},{merge:true})); await batch.commit(); setStatus("Three articles imported."); await refresh();}catch(err){setStatus(err.message,true);}};
+      renderPreview(); $("delete").disabled=true;
+    </script>
+  </body>
+</html>
