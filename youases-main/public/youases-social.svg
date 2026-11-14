@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
+  <title id="title">YouAses — AI, software, and knowledge platforms</title>
+  <desc id="desc">YouAses builds intelligent systems and products for what comes next.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#071329"/>
+      <stop offset="1" stop-color="#102858"/>
+    </linearGradient>
+    <radialGradient id="glow" cx=".78" cy=".2" r=".65">
+      <stop offset="0" stop-color="#82aaff" stop-opacity=".5"/>
+      <stop offset="1" stop-color="#82aaff" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect width="1200" height="630" fill="url(#glow)"/>
+  <circle cx="950" cy="170" r="130" fill="none" stroke="#9fc3ff" stroke-opacity=".35"/>
+  <circle cx="950" cy="170" r="92" fill="none" stroke="#67e8f9" stroke-opacity=".25" stroke-dasharray="4 10"/>
+  <text x="88" y="220" fill="#82aaff" font-family="Arial, sans-serif" font-size="24" font-weight="700" letter-spacing="8">YOUASES</text>
+  <text x="88" y="330" fill="#ffffff" font-family="Arial, sans-serif" font-size="78" font-weight="700">Intelligence</text>
+  <text x="88" y="415" fill="#9fc3ff" font-family="Arial, sans-serif" font-size="78" font-weight="700">with intent.</text>
+  <text x="90" y="500" fill="#94a3b8" font-family="Arial, sans-serif" font-size="24">AI · software · knowledge platforms</text>
+</svg>

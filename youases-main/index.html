@@ -12,6 +12,8 @@
       name="keywords"
       content="YouAses, artificial intelligence company, AI systems, knowledge platform, Y-note, technology studio"
     />
+    <meta name="author" content="YouAses" />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
     <meta property="og:title" content="YouAses | Intelligence with intent" />
     <meta
       property="og:description"
@@ -19,19 +21,63 @@
     />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://youases.work" />
+    <meta property="og:site_name" content="YouAses" />
+    <meta
+      property="og:image"
+      content="https://youases.work/youases-social.svg"
+    />
+    <meta
+      property="og:image:alt"
+      content="YouAses — AI, software, and knowledge platforms"
+    />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta
+      name="twitter:title"
+      content="YouAses | AI, software, and knowledge platforms"
+    />
+    <meta
+      name="twitter:description"
+      content="YouAses builds AI systems, software products, and knowledge platforms for people shaping what comes next."
+    />
+    <meta
+      name="twitter:image"
+      content="https://youases.work/youases-social.svg"
+    />
     <link rel="canonical" href="https://youases.work" />
     <link rel="icon" type="image/png" href="/youases-logo.png" />
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
-        "@type": "Organization",
-        "name": "YouAses",
-        "url": "https://youases.work",
-        "slogan": "Because you are Aces.",
-        "email": "hello@youases.work",
-        "sameAs": [
-          "https://www.facebook.com/profile.php?id=61590554395056",
-          "https://www.instagram.com/youases.official"
+        "@graph": [
+          {
+            "@type": "Organization",
+            "@id": "https://youases.work/#organization",
+            "name": "YouAses",
+            "url": "https://youases.work",
+            "logo": "https://youases.work/youases-logo.png",
+            "slogan": "Because you are Aces.",
+            "description": "YouAses is an independent technology company building AI systems, software products, and knowledge platforms.",
+            "email": "hello@youases.work",
+            "knowsAbout": [
+              "Artificial intelligence",
+              "Software engineering",
+              "Knowledge platforms",
+              "Human-centered technology"
+            ],
+            "sameAs": [
+              "https://www.facebook.com/profile.php?id=61590554395056",
+              "https://www.instagram.com/youases.official",
+              "https://www.linkedin.com/company/youases"
+            ]
+          },
+          {
+            "@type": "WebSite",
+            "@id": "https://youases.work/#website",
+            "url": "https://youases.work",
+            "name": "YouAses",
+            "publisher": { "@id": "https://youases.work/#organization" },
+            "inLanguage": "en"
+          }
         ]
       }
     </script>

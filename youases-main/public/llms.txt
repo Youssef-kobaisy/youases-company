@@ -1,0 +1,21 @@
+# YouAses
+
+> YouAses is an independent technology company building artificial intelligence systems, software products, and knowledge platforms for a more intelligent future.
+
+## Company
+
+YouAses combines AI, software engineering, and product design to create technology that helps people understand more, create faster, and move with confidence.
+
+- Website: https://youases.work/
+- Company: https://youases.work/company
+- Platforms: https://youases.work/platforms
+- Journal: https://youases.work/journal
+- Contact: mailto:hello@youases.work
+
+## Product
+
+Y-note is a YouAses platform in development. It is being shaped as a connected knowledge environment that helps people move from ideas and information toward context, discovery, and momentum. Product details will be revealed progressively.
+
+## Topics
+
+Artificial intelligence, human-centered AI, software products, knowledge systems, product design, technology research, connected knowledge.
