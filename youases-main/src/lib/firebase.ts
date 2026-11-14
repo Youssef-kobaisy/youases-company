@@ -2,7 +2,7 @@ import {
   addDoc,
   collection,
   getDocs,
-  getFirestore,
+  initializeFirestore,
   limit,
   query,
   serverTimestamp,
@@ -30,7 +30,9 @@ const firebaseConfig = {
 };
 
 const app = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);
-const db = getFirestore(app);
+const db = initializeFirestore(app, {
+  experimentalForceLongPolling: true,
+});
 
 export type JournalDocument = {
   slug: string;
@@ -59,11 +61,37 @@ function toJournalDocument(data: DocumentData, fallbackSlug: string) {
 }
 
 export async function saveSubscriber(email: string) {
-  await addDoc(collection(db, "subscribers"), {
-    email: email.trim().toLowerCase(),
-    source: "youases.work",
-    createdAt: serverTimestamp(),
-  });
+  const normalizedEmail = email.trim().toLowerCase();
+  const endpoint = `https://firestore.googleapis.com/v1/projects/${firebaseConfig.projectId}/databases/(default)/documents/subscribers?documentId=subscriber-${Date.now()}&key=${firebaseConfig.apiKey}`;
+  const document = {
+    fields: {
+      email: { stringValue: normalizedEmail },
+      source: { stringValue: "youases.work" },
+      createdAt: { timestampValue: new Date().toISOString() },
+    },
+  };
+  try {
+    const response = await fetch(endpoint, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(document),
+    });
+    if (!response.ok) {
+      throw new Error(`Firestore REST request failed: ${response.status}`);
+    }
+  } catch (restError) {
+    try {
+      await addDoc(collection(db, "subscribers"), {
+        email: normalizedEmail,
+        source: "youases.work",
+        createdAt: serverTimestamp(),
+      });
+    } catch (sdkError) {
+      throw new Error("Unable to save subscriber in Firestore.", {
+        cause: sdkError ?? restError,
+      });
+    }
+  }
 }
 
 export async function getPublishedJournalEntries() {
