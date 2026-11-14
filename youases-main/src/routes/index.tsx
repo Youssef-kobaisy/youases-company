@@ -230,8 +230,12 @@ function Nav({
   ];
   return (
     <>
-      <button
-        onClick={() => navigate("/")}
+      <a
+        href="/"
+        onClick={(event) => {
+          event.preventDefault();
+          navigate("/");
+        }}
         className="brand-lockup fixed left-5 top-5 z-[55] flex items-center gap-3 sm:left-8 sm:top-8"
         aria-label="Go to YouAses home"
       >
@@ -244,7 +248,7 @@ function Nav({
             Because you are Aces
           </small>
         </span>
-      </button>
+      </a>
       <button
         onClick={() => setMenuOpen(!menuOpen)}
         className="menu-trigger fixed right-5 top-5 z-[60] flex items-center gap-3 rounded-full border border-white/15 bg-[#071226]/80 px-4 py-3 text-xs font-semibold uppercase tracking-[.18em] text-white backdrop-blur-xl sm:right-8 sm:top-8"
@@ -300,9 +304,13 @@ function Nav({
               </div>
               <nav className="mt-10 flex flex-col">
                 {links.map(([label, href], index) => (
-                  <button
+                  <a
                     key={href}
-                    onClick={() => navigate(href)}
+                    href={href}
+                    onClick={(event) => {
+                      event.preventDefault();
+                      navigate(href);
+                    }}
                     className={`menu-link ${currentPath === href ? "menu-link-active" : ""}`}
                   >
                     <span className="font-mono text-xs text-[#82aaff]">
@@ -310,16 +318,20 @@ function Nav({
                     </span>
                     <span>{label}</span>
                     <ArrowUpRight size={18} />
-                  </button>
+                  </a>
                 ))}
-                <button
-                  onClick={() => navigate("/contact")}
+                <a
+                  href="/contact"
+                  onClick={(event) => {
+                    event.preventDefault();
+                    navigate("/contact");
+                  }}
                   className="menu-link menu-link-contact"
                 >
                   <span className="font-mono text-xs">04</span>
                   <span>Start a conversation</span>
                   <Mail size={18} />
-                </button>
+                </a>
               </nav>
             </div>
             <div className="border-t border-white/10 pt-6 text-sm leading-7 text-slate-500">
@@ -1406,6 +1418,12 @@ function Invitation() {
 }
 
 function Footer() {
+  const footerLinks = [
+    ["Company", "/company"],
+    ["Platforms", "/platforms"],
+    ["Journal", "/journal"],
+    ["Contact", "/contact"],
+  ];
   return (
     <footer className="border-t border-white/10 px-5 py-9 sm:px-8">
       <div className="mx-auto flex max-w-[1400px] flex-col items-start justify-between gap-7 text-xs text-slate-500 sm:flex-row sm:items-center">
@@ -1418,6 +1436,20 @@ function Footer() {
             / Because you are Aces.
           </span>
         </div>
+        <nav
+          className="flex flex-wrap items-center gap-x-5 gap-y-3"
+          aria-label="Footer navigation"
+        >
+          {footerLinks.map(([label, href]) => (
+            <a
+              key={href}
+              href={href}
+              className="transition hover:text-[#82aaff]"
+            >
+              {label}
+            </a>
+          ))}
+        </nav>
         <div className="flex items-center gap-5">
           {socialLinks.map(({ label, href, icon: Icon }) => (
             <a

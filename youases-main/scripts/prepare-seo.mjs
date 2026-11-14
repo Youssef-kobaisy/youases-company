@@ -109,6 +109,11 @@ function graphFor(page) {
       name: "YouAses",
       publisher: { "@id": `${site}/#organization` },
       inLanguage: "en",
+      potentialAction: {
+        "@type": "SearchAction",
+        target: `${site}/?q={search_term_string}`,
+        "query-input": "required name=search_term_string",
+      },
     },
     {
       "@type": page.type,

@@ -1,0 +1,13 @@
+{
+  "name": "YouAses",
+  "short_name": "YouAses",
+  "description": "AI, software, and knowledge platforms for what comes next.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#050b18",
+  "theme_color": "#071226",
+  "icons": [
+    { "src": "/favicon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/favicon-512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}
