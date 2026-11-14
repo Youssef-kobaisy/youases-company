@@ -3,7 +3,6 @@ import {
   ArrowDownRight,
   ArrowUpRight,
   BrainCircuit,
-  ChevronRight,
   Facebook,
   Globe2,
   Instagram,
@@ -101,6 +100,21 @@ function Nav({
   ];
   return (
     <>
+      <button
+        onClick={() => navigate("/")}
+        className="brand-lockup fixed left-5 top-5 z-[55] flex items-center gap-3 sm:left-8 sm:top-8"
+        aria-label="Go to YouAses home"
+      >
+        <img src={logo} alt="" className="h-9 w-9 rounded-xl object-cover" />
+        <span className="hidden text-left sm:block">
+          <strong className="block font-display text-sm tracking-tight">
+            You<span className="text-[#82aaff]">Ases</span>
+          </strong>
+          <small className="block text-[9px] uppercase tracking-[.2em] text-slate-500">
+            Because you are Aces
+          </small>
+        </span>
+      </button>
       <button
         onClick={() => navigate("/")}
         className="brand-lockup fixed left-5 top-5 z-[55] flex items-center gap-3 sm:left-8 sm:top-8"
@@ -262,8 +276,8 @@ function CompanyPage({ navigate }: { navigate: (to: string) => void }) {
       />
       <Manifesto />
       <CompanyStory />
-      <Intelligence />
-      <Work navigate={navigate} />
+      <CompanyPrinciples />
+      <CompanyNextStep navigate={navigate} />
     </>
   );
 }
@@ -871,6 +885,84 @@ function CompanyStory() {
   );
 }
 
+function CompanyPrinciples() {
+  const principles = [
+    [
+      "01",
+      "Useful over impressive",
+      "We judge technology by the clarity and capability it gives back to the people using it.",
+    ],
+    [
+      "02",
+      "Human by design",
+      "Our systems are built around real attention, real context, and the way people actually think.",
+    ],
+    [
+      "03",
+      "Long-term by default",
+      "We build foundations that can grow into lasting products, not short-lived demonstrations.",
+    ],
+  ];
+  return (
+    <section className="company-principles px-5 py-24 sm:px-8 sm:py-36">
+      <div className="mx-auto max-w-[1400px]">
+        <div className="grid gap-12 lg:grid-cols-[.65fr_1.35fr]">
+          <div>
+            <div className="eyebrow">How we work</div>
+            <h2 className="mt-5 max-w-sm font-display text-4xl leading-[.98] tracking-[-.05em] sm:text-6xl">
+              A clear standard for{" "}
+              <span className="text-gradient">ambitious technology.</span>
+            </h2>
+          </div>
+          <div className="divide-y divide-white/10 border-y border-white/10">
+            {principles.map(([number, title, copy]) => (
+              <article
+                key={number}
+                className="principle-row grid gap-5 py-7 sm:grid-cols-[3rem_1fr_1.2fr] sm:items-start"
+              >
+                <span className="font-mono text-xs text-[#82aaff]">
+                  {number}
+                </span>
+                <h3 className="font-display text-2xl tracking-[-.03em]">
+                  {title}
+                </h3>
+                <p className="max-w-md text-sm leading-7 text-slate-500">
+                  {copy}
+                </p>
+              </article>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function CompanyNextStep({ navigate }: { navigate: (to: string) => void }) {
+  return (
+    <section className="company-next px-5 pb-28 sm:px-8 sm:pb-40">
+      <div className="mx-auto flex max-w-[1400px] flex-col gap-8 rounded-[2rem] border border-white/10 bg-[#091226] p-8 sm:p-12 lg:flex-row lg:items-end lg:justify-between">
+        <div>
+          <div className="eyebrow">What comes next</div>
+          <h2 className="mt-5 max-w-2xl font-display text-4xl leading-[.98] tracking-[-.05em] sm:text-6xl">
+            The company is the beginning.
+          </h2>
+          <p className="mt-5 max-w-xl text-base leading-8 text-slate-500">
+            Our next chapter is being built through products, research, and
+            ideas that make intelligence more useful in everyday life.
+          </p>
+        </div>
+        <button
+          onClick={() => navigate("/platforms")}
+          className="inline-flex shrink-0 items-center gap-2 rounded-full bg-white px-6 py-3.5 text-sm font-bold text-[#071226] transition hover:-translate-y-1 hover:bg-[#9ac7ff]"
+        >
+          Explore our platforms <ArrowUpRight size={16} />
+        </button>
+      </div>
+    </section>
+  );
+}
+
 function Intelligence() {
   const pillars = [
     {
@@ -1010,6 +1102,7 @@ function Work({ navigate }: { navigate: (to: string) => void }) {
       label: "Knowledge systems",
       title: "The architecture of a more curious world.",
       copy: "An intelligence layer for turning scattered information into a map you can move through.",
+      status: "In development",
       tone: "work-blue",
     },
     {
@@ -1017,6 +1110,7 @@ function Work({ navigate }: { navigate: (to: string) => void }) {
       label: "Applied AI",
       title: "Tools that meet you at the edge of your ability.",
       copy: "Adaptive systems that make complex work feel less like friction and more like flow.",
+      status: "Research direction",
       tone: "work-violet",
     },
     {
@@ -1024,6 +1118,7 @@ function Work({ navigate }: { navigate: (to: string) => void }) {
       label: "Digital futures",
       title: "Interfaces for the things we have not named yet.",
       copy: "Experiments across language, learning, and the next generation of digital life.",
+      status: "Long-term horizon",
       tone: "work-cyan",
     },
   ];
@@ -1069,13 +1164,10 @@ function Work({ navigate }: { navigate: (to: string) => void }) {
                 <p className="max-w-md text-sm leading-7 text-white/60">
                   {project.copy}
                 </p>
-                <button
-                  onClick={() => navigate("/contact")}
-                  className="flex h-12 w-12 items-center justify-center rounded-full border border-white/20 transition hover:bg-white hover:text-[#071226]"
-                  aria-label={`Discuss ${project.label}`}
-                >
-                  <ArrowUpRight size={18} />
-                </button>
+                <div className="project-status">
+                  <span className="h-2 w-2 rounded-full bg-cyan-300 shadow-[0_0_14px_#67e8f9]" />
+                  {project.status}
+                </div>
               </div>
             </article>
           ))}
@@ -1107,7 +1199,7 @@ function NewsCard({
     >
       <div className="flex items-center justify-between text-[10px] uppercase tracking-[.2em] text-[#82aaff]">
         <span>{date}</span>
-        <ChevronRight size={16} />
+        <span className="h-1.5 w-1.5 rounded-full bg-cyan-300" />
       </div>
       <h3 className="mt-16 font-display text-2xl leading-[1.1] tracking-[-.03em]">
         {title}

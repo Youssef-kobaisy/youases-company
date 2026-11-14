@@ -89,6 +89,14 @@
       border-color 0.25s ease,
       transform 0.25s ease;
   }
+  .brand-lockup {
+    transition:
+      opacity 0.25s ease,
+      transform 0.25s ease;
+  }
+  .brand-lockup:hover {
+    transform: translateY(-2px);
+  }
   .menu-trigger:hover {
     border-color: rgba(130, 170, 255, 0.55);
     background: #10254a;
@@ -364,6 +372,18 @@
   }
   .project-card:hover::after {
     transform: scale(1.25) rotate(25deg);
+  }
+  .project-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 999px;
+    padding: 0.65rem 0.9rem;
+    color: rgba(255, 255, 255, 0.65);
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
   }
   .work-blue {
     background: linear-gradient(120deg, #1d4d9d, #0b1c42 65%, #071329);
