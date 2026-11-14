@@ -1,4 +1,3 @@
-import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import {
   ArrowUpRight,
@@ -21,65 +20,7 @@ import {
   Zap,
 } from "lucide-react";
 import logo from "@/assets/youases-logo.png";
-import { supabase } from "@/integrations/supabase/client";
 import { useReveal } from "@/hooks/use-reveal";
-
-export const Route = createFileRoute("/")({
-  head: () => ({
-    meta: [
-      { title: "YouAses | Technology for the next leap" },
-      {
-        name: "description",
-        content:
-          "YouAses is an independent technology company building intelligent products, thoughtful software, and digital experiences for a better future.",
-      },
-      {
-        name: "keywords",
-        content:
-          "YouAses, technology company, AI, software, Y-note, digital products",
-      },
-      {
-        property: "og:title",
-        content: "YouAses | Technology for the next leap",
-      },
-      {
-        property: "og:description",
-        content:
-          "YouAses builds intelligent products and meaningful digital experiences.",
-      },
-      { property: "og:type", content: "website" },
-      { property: "og:url", content: "https://youases.work" },
-      { property: "og:image", content: "https://youases.work/og-image.png" },
-      { name: "twitter:card", content: "summary_large_image" },
-    ],
-    links: [
-      { rel: "canonical", href: "https://youases.work" },
-      { rel: "icon", type: "image/png", href: logo },
-    ],
-    scripts: [
-      {
-        type: "application/ld+json",
-        children: JSON.stringify({
-          "@context": "https://schema.org",
-          "@type": "Organization",
-          name: "YouAses",
-          url: "https://youases.work",
-          logo: "https://youases.work/favicon.ico",
-          slogan: "Because you are Aces.",
-          description:
-            "YouAses is an independent technology company building intelligent products and digital experiences.",
-          email: "youases.official@gmail.com",
-          sameAs: [
-            "https://www.facebook.com/profile.php?id=61590554395056",
-            "https://www.instagram.com/youases.official",
-            "https://www.linkedin.com/company/youases",
-          ],
-        }),
-      },
-    ],
-  }),
-  component: Index,
-});
 
 const socialLinks = [
   {
@@ -99,7 +40,7 @@ const socialLinks = [
   },
 ];
 
-function Index() {
+export default function App() {
   useReveal();
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -507,15 +448,16 @@ function Waitlist() {
   const [status, setStatus] = useState<
     "idle" | "loading" | "success" | "error"
   >("idle");
-  async function submit(event: React.FormEvent) {
+  function submit(event: React.FormEvent) {
     event.preventDefault();
     if (!email) return;
     setStatus("loading");
-    const { error } = await supabase
-      .from("waitlist_subscribers")
-      .insert({ email, source: "y-note" });
-    if (error && error.code !== "23505") setStatus("error");
-    else setStatus("success");
+    const subject = encodeURIComponent("Y-note early access");
+    const body = encodeURIComponent(
+      `Please add ${email} to the Y-note early access list.`,
+    );
+    window.location.href = `mailto:youases.official@gmail.com?subject=${subject}&body=${body}`;
+    setStatus("success");
   }
   return (
     <section id="waitlist" className="px-5 py-20 sm:px-8 sm:py-28">
