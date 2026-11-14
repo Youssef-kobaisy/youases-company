@@ -8,12 +8,23 @@
   --color-primary: var(--primary);
   --color-border: var(--border);
 }
+.brand-lockup {
+  transition:
+    opacity 0.25s ease,
+    transform 0.25s ease;
+}
+.brand-lockup:hover {
+  transform: translateY(-2px);
+}
 
 :root {
   --background: #050b18;
   --foreground: #f5f8ff;
   --primary: #82aaff;
   --border: rgba(255, 255, 255, 0.12);
+}
+.hero-section {
+  isolation: isolate;
 }
 
 @layer base {
@@ -213,6 +224,7 @@
       transform 0.45s ease,
       border-color 0.45s ease,
       background 0.45s ease;
+    cursor: pointer;
   }
   .journal-card:nth-child(2) {
     background: linear-gradient(145deg, #17143d, rgba(255, 255, 255, 0.025));
@@ -332,6 +344,7 @@
     transition:
       transform 0.5s ease,
       box-shadow 0.5s ease;
+    cursor: default;
   }
   .project-card::after {
     position: absolute;
@@ -362,6 +375,8 @@
     background: linear-gradient(120deg, #0d6371, #092a44 65%, #071329);
   }
   .news-card {
+    display: block;
+    width: 100%;
     min-height: 330px;
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 1.6rem;

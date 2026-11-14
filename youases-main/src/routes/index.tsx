@@ -14,7 +14,6 @@ import {
   Network,
   Orbit,
   Quote,
-  Rocket,
   X,
 } from "lucide-react";
 import logo from "@/assets/youases-logo.png";
@@ -103,6 +102,21 @@ function Nav({
   return (
     <>
       <button
+        onClick={() => navigate("/")}
+        className="brand-lockup fixed left-5 top-5 z-[55] flex items-center gap-3 sm:left-8 sm:top-8"
+        aria-label="Go to YouAses home"
+      >
+        <img src={logo} alt="" className="h-9 w-9 rounded-xl object-cover" />
+        <span className="hidden text-left sm:block">
+          <strong className="block font-display text-sm tracking-tight">
+            You<span className="text-[#82aaff]">Ases</span>
+          </strong>
+          <small className="block text-[9px] uppercase tracking-[.2em] text-slate-500">
+            Because you are Aces
+          </small>
+        </span>
+      </button>
+      <button
         onClick={() => setMenuOpen(!menuOpen)}
         className="menu-trigger fixed right-5 top-5 z-[60] flex items-center gap-3 rounded-full border border-white/15 bg-[#071226]/80 px-4 py-3 text-xs font-semibold uppercase tracking-[.18em] text-white backdrop-blur-xl sm:right-8 sm:top-8"
         aria-label={menuOpen ? "Close menu" : "Open menu"}
@@ -178,6 +192,7 @@ function HomePage({ navigate }: { navigate: (to: string) => void }) {
   return (
     <>
       <Hero navigate={navigate} />
+      <SignalBar />
       <WhoWeAre navigate={navigate} />
       <HomeIntro navigate={navigate} />
       <HomeFocus />
@@ -618,6 +633,27 @@ function HomeFocus() {
 }
 
 function NewsPreview({ navigate }: { navigate: (to: string) => void }) {
+  const cards = [
+    {
+      date: "Product signal / 01",
+      title: "Y-note is getting ready to open its first door.",
+      copy: "A new environment for ideas, context, and discovery.",
+      slug: "why-we-are-building-y-note",
+      featured: true,
+    },
+    {
+      date: "Point of view / 02",
+      title: "The future of AI will be measured by what it gives back.",
+      copy: "Why useful intelligence should leave people more capable.",
+      slug: "the-human-side-of-ai",
+    },
+    {
+      date: "Studio letter / 03",
+      title: "From impossible questions to useful systems.",
+      copy: "How a YouAses idea moves from tension to product.",
+      slug: "inside-the-youases-studio",
+    },
+  ];
   return (
     <section className="px-5 py-24 sm:px-8 sm:py-32">
       <div className="mx-auto max-w-[1400px]">
@@ -636,22 +672,9 @@ function NewsPreview({ navigate }: { navigate: (to: string) => void }) {
           </button>
         </div>
         <div className="mt-10 grid gap-5 md:grid-cols-3">
-          <NewsCard
-            date="Coming soon / 01"
-            title="Y-note is getting ready to open its first door."
-            copy="A new environment for ideas, context, and discovery."
-            featured
-          />
-          <NewsCard
-            date="The long horizon / 02"
-            title="We are building an intelligence layer of our own."
-            copy="A different approach to software that understands direction."
-          />
-          <NewsCard
-            date="Studio notes / 03"
-            title="The quiet revolution is already underway."
-            copy="Why the next interface may feel less like a machine."
-          />
+          {cards.map((card) => (
+            <NewsCard key={card.slug} {...card} navigate={navigate} />
+          ))}
         </div>
       </div>
     </section>
@@ -1046,108 +1069,16 @@ function Work({ navigate }: { navigate: (to: string) => void }) {
                 <p className="max-w-md text-sm leading-7 text-white/60">
                   {project.copy}
                 </p>
-                <div className="flex justify-start lg:justify-end">
-                  <span className="flex h-12 w-12 items-center justify-center rounded-full border border-white/20 transition group-hover:bg-white group-hover:text-[#071226]">
-                    <ArrowUpRight size={18} />
-                  </span>
-                </div>
+                <button
+                  onClick={() => navigate("/contact")}
+                  className="flex h-12 w-12 items-center justify-center rounded-full border border-white/20 transition hover:bg-white hover:text-[#071226]"
+                  aria-label={`Discuss ${project.label}`}
+                >
+                  <ArrowUpRight size={18} />
+                </button>
               </div>
             </article>
           ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function News() {
-  return (
-    <section
-      id="journal"
-      className="border-t border-white/10 px-5 py-28 sm:px-8 sm:py-40"
-    >
-      <div className="mx-auto max-w-[1400px]">
-        <Heading
-          eyebrow="05 / Journal"
-          title={
-            <>
-              Signals from
-              <br />
-              <span className="text-gradient">the studio.</span>
-            </>
-          }
-        />
-        <div className="mt-14 grid gap-5 lg:grid-cols-3">
-          <NewsCard
-            date="Coming soon / 01"
-            title="Y-note: the first doorway into a larger world of knowledge."
-            copy="We are preparing the first public signal from our technology studio — a new kind of environment for ideas, context, and discovery."
-            featured
-          />
-          <NewsCard
-            date="The long horizon / 02"
-            title="Why we are building our own intelligence layer."
-            copy="The most important technology should not be rented from the future. We are exploring what it means to build with intention."
-          />
-          <NewsCard
-            date="Studio notes / 03"
-            title="The quiet revolution is already underway."
-            copy="A field note on designing AI systems that feel less like machines and more like extensions of human thought."
-          />
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function JournalFeature({ navigate }: { navigate: (to: string) => void }) {
-  return (
-    <section className="journal-feature px-5 pb-28 sm:px-8 sm:pb-40">
-      <div className="mx-auto max-w-[1400px]">
-        <div className="eyebrow">Two ideas we are following</div>
-        <div className="mt-8 grid gap-5 lg:grid-cols-2">
-          <article className="feature-article">
-            <div className="flex items-center justify-between text-xs uppercase tracking-[.2em] text-[#82aaff]">
-              <span>Field note / 01</span>
-              <BrainCircuit size={18} />
-            </div>
-            <h2 className="mt-20 max-w-lg font-display text-3xl leading-tight tracking-[-.04em] sm:text-5xl">
-              The next generation of software will understand the space between
-              your words.
-            </h2>
-            <p className="mt-6 max-w-xl text-base leading-8 text-slate-400">
-              Interfaces are moving from commands to context. At YouAses, we are
-              exploring how AI can recognize intent, protect attention, and make
-              the right next step feel obvious.
-            </p>
-            <button
-              onClick={() => navigate("/journal/the-human-side-of-ai")}
-              className="mt-8 inline-flex items-center gap-2 text-sm font-semibold text-[#9fc3ff]"
-            >
-              Read the point of view <ArrowUpRight size={16} />
-            </button>
-          </article>
-          <article className="feature-article feature-article-alt">
-            <div className="flex items-center justify-between text-xs uppercase tracking-[.2em] text-cyan-200">
-              <span>Studio letter / 02</span>
-              <Rocket size={18} />
-            </div>
-            <h2 className="mt-20 max-w-lg font-display text-3xl leading-tight tracking-[-.04em] sm:text-5xl">
-              We are building a doorway to knowledge, not another place to store
-              it.
-            </h2>
-            <p className="mt-6 max-w-xl text-base leading-8 text-slate-300/70">
-              Y-note is being shaped around a simple belief: the most valuable
-              ideas are not isolated. They are connected, evolving, and waiting
-              for the right system to bring them into focus.
-            </p>
-            <button
-              onClick={() => navigate("/journal/why-we-are-building-y-note")}
-              className="mt-8 inline-flex items-center gap-2 text-sm font-semibold text-cyan-200"
-            >
-              Follow the idea <ArrowUpRight size={16} />
-            </button>
-          </article>
         </div>
       </div>
     </section>
@@ -1159,14 +1090,21 @@ function NewsCard({
   title,
   copy,
   featured,
+  slug,
+  navigate,
 }: {
   date: string;
   title: string;
   copy: string;
   featured?: boolean;
+  slug: string;
+  navigate: (to: string) => void;
 }) {
   return (
-    <article className={`reveal news-card ${featured ? "news-featured" : ""}`}>
+    <button
+      onClick={() => navigate(`/journal/${slug}`)}
+      className={`reveal news-card text-left ${featured ? "news-featured" : ""}`}
+    >
       <div className="flex items-center justify-between text-[10px] uppercase tracking-[.2em] text-[#82aaff]">
         <span>{date}</span>
         <ChevronRight size={16} />
@@ -1178,7 +1116,7 @@ function NewsCard({
       <div className="mt-9 flex items-center gap-2 text-xs font-semibold text-slate-300">
         Read the signal <ArrowUpRight size={14} />
       </div>
-    </article>
+    </button>
   );
 }
 
