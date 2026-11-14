@@ -42,7 +42,7 @@ const routeMetadata: Record<
   { title: string; description: string; type?: string }
 > = {
   "/": {
-    title: "YouAses | AI, software, and knowledge platforms",
+    title: "YouAses Technology | AI, software, and knowledge platforms",
     description:
       "YouAses is an independent technology company building AI systems, software products, and knowledge platforms for a more intelligent future.",
   },
@@ -1430,7 +1430,7 @@ function Footer() {
         <div className="flex items-center gap-3">
           <img src={logo} alt="" className="h-7 w-7 rounded-lg" />
           <span className="font-display font-semibold text-slate-300">
-            YouAses
+            YouAses Technology
           </span>
           <span className="hidden text-slate-700 sm:inline">
             / Because you are Aces.

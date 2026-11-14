@@ -9,7 +9,7 @@ const site = "https://youases.work";
 const pages = [
   {
     path: "/",
-    title: "YouAses | AI, software, and knowledge platforms",
+    title: "YouAses Technology | AI, software, and knowledge platforms",
     description:
       "YouAses is an independent technology company building AI systems, software products, and knowledge platforms for a more intelligent future.",
     type: "WebSite",
@@ -83,7 +83,8 @@ function graphFor(page) {
     {
       "@type": "Organization",
       "@id": `${site}/#organization`,
-      name: "YouAses",
+      name: "YouAses Technology",
+      alternateName: "YouAses",
       url: site,
       logo: `${site}/youases-logo.png`,
       slogan: "Because you are Aces.",
@@ -106,7 +107,8 @@ function graphFor(page) {
       "@type": "WebSite",
       "@id": `${site}/#website`,
       url: site,
-      name: "YouAses",
+      name: "YouAses Technology",
+      alternateName: "YouAses",
       publisher: { "@id": `${site}/#organization` },
       inLanguage: "en",
       potentialAction: {
@@ -128,7 +130,12 @@ function graphFor(page) {
     {
       "@type": "BreadcrumbList",
       itemListElement: [
-        { "@type": "ListItem", position: 1, name: "YouAses", item: site },
+        {
+          "@type": "ListItem",
+          position: 1,
+          name: "YouAses Technology",
+          item: site,
+        },
         ...(page.path !== "/"
           ? [
               {
