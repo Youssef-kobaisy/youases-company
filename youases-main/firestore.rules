@@ -1,0 +1,21 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /subscribers/{subscriberId} {
+      allow create: if request.resource.data.keys().hasOnly([
+        'email',
+        'source',
+        'createdAt'
+      ])
+      && request.resource.data.email is string
+      && request.resource.data.email.matches('^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$');
+      allow read, update, delete: if false;
+    }
+
+    match /journal/{journalId} {
+      allow read: if resource.data.published == true;
+      allow write: if false;
+    }
+  }
+}

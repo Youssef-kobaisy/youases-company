@@ -19,6 +19,7 @@ import {
 import logo from "@/assets/youases-logo.png";
 import { useReveal } from "@/hooks/use-reveal";
 import appIcon from "@/assets/youases-app-icon.jpg";
+import type { JournalDocument } from "@/lib/firebase";
 
 const socialLinks = [
   {
@@ -185,9 +186,11 @@ export default function App() {
     ? path
     : isKnownArticle
       ? "/journal-article"
-      : path === "/"
-        ? "/"
-        : "/404";
+      : path.startsWith("/journal/")
+        ? "/journal-article"
+        : path === "/"
+          ? "/"
+          : "/404";
 
   return (
     <div className="min-h-screen overflow-hidden bg-[#050b18] text-white">
@@ -535,7 +538,28 @@ const journalArticles = [
 ];
 
 function JournalPage({ navigate }: { navigate: (to: string) => void }) {
+  const [remoteStories, setRemoteStories] = useState<JournalDocument[]>([]);
   const [featured, ...stories] = journalArticles;
+  useEffect(() => {
+    let active = true;
+    import("@/lib/firebase")
+      .then(({ getPublishedJournalEntries }) => getPublishedJournalEntries())
+      .then((entries) => {
+        if (active) setRemoteStories(entries);
+      })
+      .catch((error) => {
+        console.warn("YouAses Journal could not load from Firestore.", error);
+        // The local editorial set remains available if Firestore is unavailable.
+      });
+    return () => {
+      active = false;
+    };
+  }, []);
+  const remoteOnlyStories = remoteStories.filter(
+    (remote) =>
+      !journalArticles.some((article) => article.slug === remote.slug),
+  );
+  const visibleStories = [...remoteOnlyStories, ...stories];
   return (
     <>
       <PageIntro
@@ -580,11 +604,11 @@ function JournalPage({ navigate }: { navigate: (to: string) => void }) {
               </h2>
             </div>
             <span className="hidden text-sm text-slate-600 sm:block">
-              {stories.length} stories / more to come
+              {visibleStories.length} stories / more to come
             </span>
           </div>
           <div className="mt-8 divide-y divide-white/10 border-y border-white/10">
-            {stories.map((article) => (
+            {visibleStories.map((article) => (
               <button
                 key={article.slug}
                 onClick={() => navigate(`/journal/${article.slug}`)}
@@ -638,7 +662,50 @@ function JournalArticlePage({
   navigate: (to: string) => void;
 }) {
   const slug = path.replace("/journal/", "");
-  const article = journalArticles.find((item) => item.slug === slug);
+  const staticArticle = journalArticles.find((item) => item.slug === slug);
+  const [remoteArticle, setRemoteArticle] = useState<JournalDocument | null>(
+    null,
+  );
+  const [loading, setLoading] = useState(!staticArticle);
+
+  useEffect(() => {
+    if (staticArticle) return;
+    let active = true;
+    setLoading(true);
+    import("@/lib/firebase")
+      .then(({ getPublishedJournalEntry }) => getPublishedJournalEntry(slug))
+      .then((entry) => {
+        if (active) setRemoteArticle(entry);
+      })
+      .catch((error) => {
+        console.warn("The requested Journal entry could not load.", error);
+        if (active) setRemoteArticle(null);
+      })
+      .finally(() => {
+        if (active) setLoading(false);
+      });
+    return () => {
+      active = false;
+    };
+  }, [slug, staticArticle]);
+
+  const article = staticArticle ?? remoteArticle;
+
+  if (loading) {
+    return (
+      <PageIntro
+        eyebrow="Journal / Loading"
+        title={
+          <>
+            Opening the
+            <br />
+            <span className="text-gradient">next signal.</span>
+          </>
+        }
+        copy="Loading the latest YouAses Journal entry."
+      />
+    );
+  }
 
   if (!article) {
     return (
@@ -1426,10 +1493,22 @@ function NewsCard({
 
 function Invitation({ standalone = false }: { standalone?: boolean }) {
   const [email, setEmail] = useState("");
-  function submit(event: React.FormEvent) {
+  const [status, setStatus] = useState<"idle" | "saving" | "success" | "error">(
+    "idle",
+  );
+  async function submit(event: React.FormEvent) {
     event.preventDefault();
-    if (!email) return;
-    window.location.href = `mailto:hello@youases.work?subject=${encodeURIComponent("YouAses / I want to be early")}&body=${encodeURIComponent(`Please keep me close to the YouAses journey. My email is ${email}.`)}`;
+    if (!email || status === "saving") return;
+    setStatus("saving");
+    try {
+      const { saveSubscriber } = await import("@/lib/firebase");
+      await saveSubscriber(email);
+      setEmail("");
+      setStatus("success");
+    } catch (error) {
+      console.error("Could not save the YouAses subscriber.", error);
+      setStatus("error");
+    }
   }
   return (
     <section id="contact" className="relative px-5 py-28 sm:px-8 sm:py-40">
@@ -1473,14 +1552,31 @@ function Invitation({ standalone = false }: { standalone?: boolean }) {
                 />
                 <button
                   aria-label="Join the YouAses list"
+                  disabled={status === "saving"}
                   className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[#82aaff] text-[#071226] transition hover:bg-white"
                 >
                   <ArrowUpRight size={18} />
                 </button>
               </div>
             </form>
-            <p className="mt-4 text-xs text-slate-600">
-              No noise. Only meaningful signals from YouAses.
+            <p
+              className={`mt-4 text-xs ${
+                status === "error"
+                  ? "text-rose-300"
+                  : status === "success"
+                    ? "text-cyan-300"
+                    : "text-slate-600"
+              }`}
+              role="status"
+              aria-live="polite"
+            >
+              {status === "saving"
+                ? "Saving your place..."
+                : status === "success"
+                  ? "You are on the list. We will keep you close."
+                  : status === "error"
+                    ? "We could not save that yet. Please try again."
+                    : "No noise. Only meaningful signals from YouAses."}
             </p>
           </div>
         </div>

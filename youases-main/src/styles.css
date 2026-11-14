@@ -63,6 +63,9 @@
 .page-transition {
   animation: page-in 0.65s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
+#root > .seo-fallback {
+  display: none;
+}
 .hero-section {
   isolation: isolate;
 }
@@ -301,6 +304,9 @@
         transparent 30%
       ),
       linear-gradient(135deg, #102858, #071329 70%);
+  }
+  .journal-index {
+    min-height: 1200px;
   }
   .journal-featured-mark {
     display: flex;

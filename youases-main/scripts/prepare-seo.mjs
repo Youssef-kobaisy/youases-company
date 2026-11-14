@@ -313,7 +313,7 @@ function fallbackFor(page) {
         ["/platforms", "Explore our platforms"],
       ],
     };
-  return `<main><p>${escapeHtml(page.path === "/journal" ? "YouAses Journal" : "YouAses Technology")}</p><h1>${escapeHtml(content.heading)}</h1><p>${escapeHtml(content.intro)}</p><nav aria-label="Related pages"><ul>${content.links.map(([href, label]) => `<li><a href="${href}">${escapeHtml(label)}</a></li>`).join("")}</ul></nav></main>`;
+  return `<main class="seo-fallback"><p>${escapeHtml(page.path === "/journal" ? "YouAses Journal" : "YouAses Technology")}</p><h1>${escapeHtml(content.heading)}</h1><p>${escapeHtml(content.intro)}</p><nav aria-label="Related pages"><ul>${content.links.map(([href, label]) => `<li><a href="${href}">${escapeHtml(label)}</a></li>`).join("")}</ul></nav></main>`;
 }
 
 const source = await readFile(join(dist, "index.html"), "utf8");
