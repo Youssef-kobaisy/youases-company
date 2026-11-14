@@ -173,12 +173,56 @@ function HomePage({ navigate }: { navigate: (to: string) => void }) {
   return (
     <>
       <Hero navigate={navigate} />
+      <WhoWeAre navigate={navigate} />
       <HomeIntro navigate={navigate} />
       <HomeFocus />
       <YNote navigate={navigate} />
       <NewsPreview navigate={navigate} />
       <Invitation />
     </>
+  );
+}
+
+function WhoWeAre({ navigate }: { navigate: (to: string) => void }) {
+  return (
+    <section className="who-we-are border-y border-white/10 px-5 py-20 sm:px-8 sm:py-28">
+      <div className="mx-auto grid max-w-[1400px] gap-12 lg:grid-cols-[.8fr_1.2fr] lg:items-end">
+        <div>
+          <div className="eyebrow">Start here / Who we are</div>
+          <h2 className="mt-5 max-w-xl font-display text-4xl leading-[.98] tracking-[-.05em] sm:text-6xl">
+            YouAses is a technology company building{" "}
+            <span className="text-gradient">what comes next.</span>
+          </h2>
+        </div>
+        <div className="max-w-2xl">
+          <p className="text-lg leading-8 text-slate-200 sm:text-2xl sm:leading-10">
+            We combine artificial intelligence, software engineering, and
+            thoughtful product design to create tools that help people
+            understand more, create faster, and move with confidence.
+          </p>
+          <p className="mt-6 text-base leading-8 text-slate-500">
+            We are an independent studio behind new AI products and knowledge
+            platforms. Our first public platform, Y-note, is being built as a
+            doorway into connected knowledge — not another place to collect
+            disconnected notes.
+          </p>
+          <div className="mt-8 flex flex-wrap gap-5">
+            <button
+              onClick={() => navigate("/company")}
+              className="inline-flex items-center gap-2 text-sm font-semibold text-[#9fc3ff]"
+            >
+              Read our story <ArrowUpRight size={16} />
+            </button>
+            <button
+              onClick={() => navigate("/platforms")}
+              className="inline-flex items-center gap-2 text-sm font-semibold text-slate-400 transition hover:text-white"
+            >
+              Explore what we build <ArrowUpRight size={16} />
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
   );
 }
 
@@ -189,12 +233,12 @@ function CompanyPage({ navigate }: { navigate: (to: string) => void }) {
         eyebrow="The company"
         title={
           <>
-            Technology with
+            We build technology
             <br />
-            <span className="text-gradient">a point of view.</span>
+            <span className="text-gradient">with a human point of view.</span>
           </>
         }
-        copy="YouAses is an AI-first technology company building intelligent software and knowledge platforms for people and organizations shaping what comes next."
+        copy="YouAses is an independent technology company. We use artificial intelligence, software, and design to create products that make knowledge more useful and ambitious work more possible."
       />
       <Manifesto />
       <CompanyStory />
@@ -208,15 +252,15 @@ function PlatformsPage({ navigate }: { navigate: (to: string) => void }) {
   return (
     <>
       <PageIntro
-        eyebrow="Platforms & initiatives"
+        eyebrow="What we are building"
         title={
           <>
-            The ideas we are
+            Products for a
             <br />
-            <span className="text-gradient">turning into reality.</span>
+            <span className="text-gradient">more intelligent future.</span>
           </>
         }
-        copy="Some are already taking shape. Others are still being named. Every initiative starts with the same ambition: expand what people can understand and create."
+        copy="This is the YouAses product space: AI systems, knowledge environments, and software experiments designed to expand what people can understand, create, and become."
       />
       <Intelligence />
       <YNote navigate={navigate} />
@@ -232,12 +276,12 @@ function JournalPage() {
         eyebrow="YouAses Journal"
         title={
           <>
-            Signals from
+            The ideas behind
             <br />
-            <span className="text-gradient">the studio.</span>
+            <span className="text-gradient">the work.</span>
           </>
         }
-        copy="A living record of the questions, systems, and ambitious experiments guiding YouAses forward."
+        copy="The Journal explains what we are building, why it matters, and the questions shaping our approach to artificial intelligence, software, and knowledge."
       />
       <News />
       <JournalFeature />
@@ -301,18 +345,18 @@ function HomeFocus() {
   const items = [
     [
       "01",
-      "Understand",
-      "We turn complex information into systems people can actually navigate.",
+      "Artificial intelligence",
+      "We design useful AI systems that understand context, support decisions, and make difficult work feel more natural.",
     ],
     [
       "02",
-      "Augment",
-      "We build AI that extends human judgment instead of replacing the human point of view.",
+      "Software products",
+      "We turn ambitious ideas into clear, reliable digital products people return to because they make progress visible.",
     ],
     [
       "03",
-      "Advance",
-      "We create software with the ambition to move industries, not just screens.",
+      "Knowledge platforms",
+      "We connect ideas, information, and people in new environments built for learning, discovery, and momentum.",
     ],
   ];
   return (
@@ -397,8 +441,10 @@ function Hero({ navigate }: { navigate: (to: string) => void }) {
             <span className="hero-word">with intent.</span>
           </h1>
           <p className="reveal mt-9 max-w-xl text-lg leading-8 text-slate-400 sm:text-xl">
-            We build intelligent systems, software, and new interfaces that help
-            humanity move through the next era with more clarity.
+            YouAses is an independent technology company focused on artificial
+            intelligence, intelligent software, and knowledge platforms. We
+            build the products that help people think further and act with more
+            clarity.
           </p>
           <div className="reveal mt-10 flex flex-wrap items-center gap-4">
             <button
