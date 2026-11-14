@@ -7,7 +7,6 @@ import { useEffect } from "react";
 export function useReveal() {
   useEffect(() => {
     if (typeof window === "undefined" || !("IntersectionObserver" in window)) return;
-    const els = document.querySelectorAll<HTMLElement>(".reveal");
     const io = new IntersectionObserver(
       (entries) => {
         for (const e of entries) {
@@ -19,7 +18,15 @@ export function useReveal() {
       },
       { threshold: 0.15, rootMargin: "0px 0px -60px 0px" },
     );
-    els.forEach((el) => io.observe(el));
-    return () => io.disconnect();
+    const observe = () => {
+      document.querySelectorAll<HTMLElement>(".reveal:not(.in)").forEach((el) => io.observe(el));
+    };
+    observe();
+    const mutationObserver = new MutationObserver(observe);
+    mutationObserver.observe(document.body, { childList: true, subtree: true });
+    return () => {
+      mutationObserver.disconnect();
+      io.disconnect();
+    };
   }, []);
 }
