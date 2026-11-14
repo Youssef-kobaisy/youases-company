@@ -42,30 +42,30 @@ const routeMetadata: Record<
   { title: string; description: string; type?: string }
 > = {
   "/": {
-    title: "YouAses Technology | AI, software, and knowledge platforms",
+    title: "AI Software & Knowledge Platforms for the Future | YouAses",
     description:
       "YouAses is an independent technology company building AI systems, software products, and knowledge platforms for a more intelligent future.",
   },
   "/company": {
-    title: "About YouAses | Independent AI technology company",
+    title: "About Our AI Technology Company | YouAses Technology",
     description:
       "Learn how YouAses combines artificial intelligence, software engineering, and product design to build useful technology for people shaping what comes next.",
     type: "AboutPage",
   },
   "/platforms": {
-    title: "YouAses Platforms | Y-note and intelligent software",
+    title: "AI Products & Knowledge Platforms in Development | YouAses",
     description:
       "Explore the AI systems, knowledge environments, and software products YouAses is building, including Y-note, a connected knowledge platform in development.",
     type: "CollectionPage",
   },
   "/journal": {
-    title: "YouAses Journal | Ideas behind AI and software",
+    title: "Ideas on AI, Software & Knowledge | YouAses Journal",
     description:
       "Read the YouAses Journal for clear thinking on artificial intelligence, human-centered software, knowledge systems, and the products taking shape in our studio.",
     type: "CollectionPage",
   },
   "/contact": {
-    title: "Contact YouAses | Start a conversation",
+    title: "Contact an Independent AI Technology Company | YouAses",
     description:
       "Contact YouAses at hello@youases.work to follow our product releases, discuss technology, or start a conversation with the studio.",
     type: "ContactPage",
@@ -76,7 +76,7 @@ function getMetadata(path: string) {
   if (routeMetadata[path]) return routeMetadata[path];
   if (path === "/journal/why-we-are-building-y-note") {
     return {
-      title: "Why YouAses Is Building Y-note | YouAses Journal",
+      title: "Why We Are Building Y-note: A New Platform | YouAses",
       description:
         "Y-note began with a question about what knowledge software could become when ideas, context, and discovery are connected.",
       type: "Article",
@@ -84,7 +84,7 @@ function getMetadata(path: string) {
   }
   if (path === "/journal/the-human-side-of-ai") {
     return {
-      title: "The Human Side of AI | YouAses Journal",
+      title: "The Human Side of AI: Useful Intelligence | YouAses",
       description:
         "YouAses explores why the future of AI should be measured by the clarity, capability, and agency it gives back to people.",
       type: "Article",
@@ -92,7 +92,7 @@ function getMetadata(path: string) {
   }
   if (path === "/journal/inside-the-youases-studio") {
     return {
-      title: "Inside the YouAses Studio | YouAses Journal",
+      title: "From Questions to AI Systems | YouAses Studio Journal",
       description:
         "How YouAses moves from difficult human problems to useful AI systems, software products, and knowledge platforms.",
       type: "Article",
@@ -177,11 +177,16 @@ export default function App() {
     setMenuOpen(false);
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
+  const isKnownArticle =
+    path.startsWith("/journal/") &&
+    journalArticles.some((article) => `/journal/${article.slug}` === path);
   const page = ["/company", "/platforms", "/journal", "/contact"].includes(path)
     ? path
-    : path.startsWith("/journal/")
+    : isKnownArticle
       ? "/journal-article"
-      : "/";
+      : path === "/"
+        ? "/"
+        : "/404";
 
   return (
     <div className="min-h-screen overflow-hidden bg-[#050b18] text-white">
@@ -204,7 +209,8 @@ export default function App() {
         {page === "/journal-article" && (
           <JournalArticlePage path={path} navigate={navigate} />
         )}
-        {page === "/contact" && <Invitation />}
+        {page === "/contact" && <Invitation standalone />}
+        {page === "/404" && <NotFoundPage navigate={navigate} />}
       </main>
       <Footer />
     </div>
@@ -561,7 +567,7 @@ function JournalPage({ navigate }: { navigate: (to: string) => void }) {
               </button>
             </div>
             <div className="journal-featured-mark">
-              <img src={appIcon} alt="Y-note" />
+              <img src={appIcon} alt="Y-note" loading="lazy" decoding="async" />
               <span>Y-note / First signal</span>
             </div>
           </div>
@@ -704,14 +710,55 @@ function JournalArticlePage({
   );
 }
 
+function NotFoundPage({ navigate }: { navigate: (to: string) => void }) {
+  return (
+    <PageIntro
+      eyebrow="404 / Page not found"
+      title={
+        <>
+          This page is
+          <br />
+          <span className="text-gradient">not here.</span>
+        </>
+      }
+      copy="The page may have moved, but the YouAses story is still unfolding. Return home or explore the Journal."
+    >
+      <div className="mt-8 flex flex-wrap gap-5">
+        <a
+          href="/"
+          onClick={(event) => {
+            event.preventDefault();
+            navigate("/");
+          }}
+          className="inline-flex items-center gap-2 rounded-full bg-white px-6 py-3.5 text-sm font-bold text-[#071226]"
+        >
+          Return home <ArrowUpRight size={16} />
+        </a>
+        <a
+          href="/journal"
+          onClick={(event) => {
+            event.preventDefault();
+            navigate("/journal");
+          }}
+          className="inline-flex items-center gap-2 text-sm font-semibold text-[#9fc3ff]"
+        >
+          Read the Journal <ArrowUpRight size={16} />
+        </a>
+      </div>
+    </PageIntro>
+  );
+}
+
 function PageIntro({
   eyebrow,
   title,
   copy,
+  children,
 }: {
   eyebrow: string;
   title: ReactNode;
   copy: string;
+  children?: ReactNode;
 }) {
   return (
     <section className="page-intro px-5 pb-24 pt-44 sm:px-8 sm:pb-32">
@@ -723,6 +770,7 @@ function PageIntro({
         <p className="reveal mt-8 max-w-2xl text-lg leading-8 text-slate-400 sm:text-xl">
           {copy}
         </p>
+        {children}
       </div>
     </section>
   );
@@ -1186,6 +1234,8 @@ function YNote({ navigate }: { navigate: (to: string) => void }) {
               <img
                 src={appIcon}
                 alt="Y-note icon"
+                loading="lazy"
+                decoding="async"
                 className="h-full w-full rounded-lg object-cover"
               />
             </span>
@@ -1360,7 +1410,7 @@ function NewsCard({
   );
 }
 
-function Invitation() {
+function Invitation({ standalone = false }: { standalone?: boolean }) {
   const [email, setEmail] = useState("");
   function submit(event: React.FormEvent) {
     event.preventDefault();
@@ -1374,11 +1424,19 @@ function Invitation() {
         <div className="grid gap-14 lg:grid-cols-[1fr_.8fr] lg:items-end">
           <div>
             <div className="eyebrow">06 / The invitation</div>
-            <h2 className="mt-5 max-w-4xl font-display text-5xl font-medium leading-[.92] tracking-[-.06em] sm:text-8xl">
-              The next chapter
-              <br />
-              <span className="text-gradient">is being written.</span>
-            </h2>
+            {standalone ? (
+              <h1 className="mt-5 max-w-4xl font-display text-5xl font-medium leading-[.92] tracking-[-.06em] sm:text-8xl">
+                The next chapter
+                <br />
+                <span className="text-gradient">is being written.</span>
+              </h1>
+            ) : (
+              <h2 className="mt-5 max-w-4xl font-display text-5xl font-medium leading-[.92] tracking-[-.06em] sm:text-8xl">
+                The next chapter
+                <br />
+                <span className="text-gradient">is being written.</span>
+              </h2>
+            )}
             <p className="mt-7 max-w-lg text-lg leading-8 text-slate-400">
               If you are building, thinking, or simply curious about what comes
               next — stay close.
@@ -1428,7 +1486,13 @@ function Footer() {
     <footer className="border-t border-white/10 px-5 py-9 sm:px-8">
       <div className="mx-auto flex max-w-[1400px] flex-col items-start justify-between gap-7 text-xs text-slate-500 sm:flex-row sm:items-center">
         <div className="flex items-center gap-3">
-          <img src={logo} alt="" className="h-7 w-7 rounded-lg" />
+          <img
+            src={logo}
+            alt=""
+            loading="lazy"
+            decoding="async"
+            className="h-7 w-7 rounded-lg"
+          />
           <span className="font-display font-semibold text-slate-300">
             YouAses Technology
           </span>

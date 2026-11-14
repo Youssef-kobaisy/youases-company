@@ -9,60 +9,60 @@ const site = "https://youases.work";
 const pages = [
   {
     path: "/",
-    title: "YouAses Technology | AI, software, and knowledge platforms",
+    title: "AI Software & Knowledge Platforms for the Future | YouAses",
     description:
-      "YouAses is an independent technology company building AI systems, software products, and knowledge platforms for a more intelligent future.",
+      "YouAses builds AI systems, software products, and connected knowledge platforms that help people think further, create faster, and move with clarity.",
     type: "WebSite",
   },
   {
     path: "/company",
-    title: "About YouAses | Independent AI technology company",
+    title: "About Our AI Technology Company | YouAses Technology",
     description:
-      "Learn how YouAses combines artificial intelligence, software engineering, and product design to build useful technology for people shaping what comes next.",
+      "Meet YouAses Technology, an independent AI company combining software engineering and product design to build useful tools for people shaping what comes next.",
     type: "AboutPage",
   },
   {
     path: "/platforms",
-    title: "YouAses Platforms | Y-note and intelligent software",
+    title: "AI Products & Knowledge Platforms in Development | YouAses",
     description:
-      "Explore the AI systems, knowledge environments, and software products YouAses is building, including Y-note, a connected knowledge platform in development.",
+      "Explore YouAses AI products and knowledge platforms in development, including Y-note, a connected environment for ideas, context, discovery, and momentum.",
     type: "CollectionPage",
   },
   {
     path: "/journal",
-    title: "YouAses Journal | Ideas behind AI and software",
+    title: "Ideas on AI, Software & Knowledge | YouAses Journal",
     description:
-      "Read the YouAses Journal for clear thinking on artificial intelligence, human-centered software, knowledge systems, and the products taking shape in our studio.",
+      "Read the YouAses Journal for clear ideas on artificial intelligence, human-centered software, knowledge systems, and products taking shape in our studio.",
     type: "CollectionPage",
   },
   {
     path: "/contact",
-    title: "Contact YouAses | Start a conversation",
+    title: "Contact an Independent AI Technology Company | YouAses",
     description:
-      "Contact YouAses at hello@youases.work to follow our product releases, discuss technology, or start a conversation with the studio.",
+      "Contact YouAses Technology to follow upcoming AI products, discuss software and knowledge systems, or start a conversation with our independent studio.",
     type: "ContactPage",
   },
   {
     path: "/journal/why-we-are-building-y-note",
-    title: "Why YouAses Is Building Y-note | YouAses Journal",
+    title: "Why We Are Building Y-note: A New Platform | YouAses",
     description:
-      "Y-note began with a question about what knowledge software could become when ideas, context, and discovery are connected.",
+      "Discover why YouAses is building Y-note as a new knowledge platform where ideas, context, and discovery become useful momentum for clearer, better work.",
     type: "Article",
     article: "We are building a doorway to knowledge.",
   },
   {
     path: "/journal/the-human-side-of-ai",
-    title: "The Human Side of AI | YouAses Journal",
+    title: "The Human Side of AI: Useful Intelligence | YouAses",
     description:
-      "YouAses explores why the future of AI should be measured by the clarity, capability, and agency it gives back to people.",
+      "YouAses explores why useful AI should be measured by the clarity, capability, and agency it gives back to the people using it in daily life.",
     type: "Article",
     article: "The future of AI will be measured by what it gives back.",
   },
   {
     path: "/journal/inside-the-youases-studio",
-    title: "Inside the YouAses Studio | YouAses Journal",
+    title: "From Questions to AI Systems | YouAses Studio Journal",
     description:
-      "How YouAses moves from difficult human problems to useful AI systems, software products, and knowledge platforms.",
+      "See how YouAses moves from difficult human problems to useful AI systems, software products, and knowledge platforms through research, design, and engineering.",
     type: "Article",
     article:
       "Inside the YouAses studio: from impossible questions to useful systems.",
@@ -195,38 +195,47 @@ function graphFor(page) {
 
 function updateHtml(html, page) {
   const url = `${site}${page.path === "/" ? "" : page.path}`;
+  const fallback = fallbackFor(page);
   return html
     .replace(
       /<title>[\s\S]*?<\/title>/,
       `<title>${escapeHtml(page.title)}</title>`,
     )
     .replace(
-      /<meta name="description" content="[^"]*"/,
-      `<meta name="description" content="${escapeHtml(page.description)}"`,
+      /<meta\s+name="description"[\s\S]*?\/>/,
+      `<meta name="description" content="${escapeHtml(page.description)}" />`,
     )
     .replace(
-      /<meta property="og:title" content="[^"]*"/,
-      `<meta property="og:title" content="${escapeHtml(page.title)}"`,
+      /<meta\s+property="og:title"[\s\S]*?\/>/,
+      `<meta property="og:title" content="${escapeHtml(page.title)}" />`,
     )
     .replace(
-      /<meta property="og:description" content="[^"]*"/,
-      `<meta property="og:description" content="${escapeHtml(page.description)}"`,
+      /<meta\s+property="og:description"[\s\S]*?\/>/,
+      `<meta property="og:description" content="${escapeHtml(page.description)}" />`,
     )
     .replace(
       /<meta property="og:url" content="[^"]*"/,
       `<meta property="og:url" content="${url}"`,
     )
     .replace(
-      /<meta property="og:type" content="[^"]*"/,
-      `<meta property="og:type" content="${page.type === "Article" ? "article" : "website"}"`,
+      /<meta\s+property="og:type"\s+content="[^"]*"\s*\/>/,
+      `<meta property="og:type" content="${page.type === "Article" ? "article" : "website"}" />`,
     )
     .replace(
-      /<meta name="twitter:title" content="[^"]*"/,
-      `<meta name="twitter:title" content="${escapeHtml(page.title)}"`,
+      /<meta\s+property="og:image"[\s\S]*?\/>/,
+      `<meta property="og:image" content="${site}/youases-social.png" />`,
     )
     .replace(
-      /<meta name="twitter:description" content="[^"]*"/,
-      `<meta name="twitter:description" content="${escapeHtml(page.description)}"`,
+      /<meta\s+name="twitter:title"[\s\S]*?\/>/,
+      `<meta name="twitter:title" content="${escapeHtml(page.title)}" />`,
+    )
+    .replace(
+      /<meta\s+name="twitter:description"[\s\S]*?\/>/,
+      `<meta name="twitter:description" content="${escapeHtml(page.description)}" />`,
+    )
+    .replace(
+      /<meta\s+name="twitter:image"[\s\S]*?\/>/,
+      `<meta name="twitter:image" content="${site}/youases-social.png" />`,
     )
     .replace(
       /<link rel="canonical" href="[^"]*"/,
@@ -235,15 +244,84 @@ function updateHtml(html, page) {
     .replace(
       /<script type="application\/ld\+json">[\s\S]*?<\/script>/,
       `<script type="application/ld+json">${graphFor(page)}</script>`,
-    );
+    )
+    .replace(/<div id="root"><\/div>/, `<div id="root">${fallback}</div>`);
+}
+
+function fallbackFor(page) {
+  const labels = {
+    "/": {
+      heading: "Technology for what comes next.",
+      intro:
+        "YouAses Technology is an independent AI and software company building intelligent systems, useful products, and connected knowledge platforms.",
+      links: [
+        ["/company", "Discover the company"],
+        ["/platforms", "Explore platforms"],
+        ["/journal", "Read the Journal"],
+        ["/contact", "Start a conversation"],
+      ],
+    },
+    "/company": {
+      heading: "We build with intention.",
+      intro:
+        "YouAses combines artificial intelligence, software engineering, and product design to create technology that gives people more clarity, capability, and room to think.",
+      links: [
+        ["/platforms", "See what we are building"],
+        ["/journal", "Read our thinking"],
+        ["/contact", "Contact YouAses"],
+      ],
+    },
+    "/platforms": {
+      heading: "The next layer is forming.",
+      intro:
+        "Explore the AI products and knowledge platforms taking shape at YouAses, including Y-note, a new environment for ideas, context, discovery, and momentum.",
+      links: [
+        ["/journal/why-we-are-building-y-note", "Why Y-note"],
+        ["/company", "How we work"],
+        ["/contact", "Follow the next release"],
+      ],
+    },
+    "/journal": {
+      heading: "Ideas worth following.",
+      intro:
+        "The YouAses Journal shares clear perspectives on artificial intelligence, human-centered software, knowledge systems, and products being built in our studio.",
+      links: [
+        ["/journal/why-we-are-building-y-note", "Why we are building Y-note"],
+        ["/journal/the-human-side-of-ai", "The human side of AI"],
+        ["/journal/inside-the-youases-studio", "Inside the YouAses studio"],
+      ],
+    },
+  };
+  const article = page.article
+    ? {
+        heading: page.article,
+        intro: page.description,
+        links: [
+          ["/journal", "Back to the Journal"],
+          ["/platforms", "Explore YouAses platforms"],
+          ["/contact", "Stay close to what is next"],
+        ],
+      }
+    : null;
+  const content = article ||
+    labels[page.path] || {
+      heading: "Start a conversation with YouAses.",
+      intro: page.description,
+      links: [
+        ["/", "Return home"],
+        ["/company", "Learn about YouAses"],
+        ["/platforms", "Explore our platforms"],
+      ],
+    };
+  return `<main><p>${escapeHtml(page.path === "/journal" ? "YouAses Journal" : "YouAses Technology")}</p><h1>${escapeHtml(content.heading)}</h1><p>${escapeHtml(content.intro)}</p><nav aria-label="Related pages"><ul>${content.links.map(([href, label]) => `<li><a href="${href}">${escapeHtml(label)}</a></li>`).join("")}</ul></nav></main>`;
 }
 
 const source = await readFile(join(dist, "index.html"), "utf8");
-const today = new Date().toISOString().slice(0, 10);
+const lastModified = "2026-11-14";
 const urls = pages.map(
   (page) => `${site}${page.path === "/" ? "" : page.path}`,
 );
-const sitemap = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${pages.map((page) => `  <url><loc>${site}${page.path === "/" ? "" : page.path}</loc><lastmod>${today}</lastmod><changefreq>${page.path === "/" ? "weekly" : page.article ? "monthly" : "monthly"}</changefreq><priority>${page.path === "/" ? "1.0" : page.article ? "0.7" : "0.8"}</priority></url>`).join("\n")}\n</urlset>\n`;
+const sitemap = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${pages.map((page) => `  <url><loc>${site}${page.path === "/" ? "" : page.path}</loc><lastmod>${page.lastModified ?? lastModified}</lastmod></url>`).join("\n")}\n</urlset>\n`;
 
 await writeFile(join(dist, "sitemap.xml"), sitemap);
 await writeFile(
@@ -260,6 +338,29 @@ for (const page of pages) {
   await mkdir(dirname(target), { recursive: true });
   await writeFile(target, updateHtml(source, page));
 }
+
+const notFound = updateHtml(source, {
+  path: "/404",
+  title: "Page Not Found | YouAses Technology",
+  description: "The requested YouAses page could not be found.",
+  type: "WebPage",
+});
+await writeFile(
+  join(dist, "404.html"),
+  notFound
+    .replace(
+      /<meta name="robots" content="[^"]*"/,
+      '<meta name="robots" content="noindex, follow"',
+    )
+    .replace(
+      /<div id="root">[\s\S]*?<\/div>/,
+      `<div id="root">${fallbackFor({
+        path: "/404",
+        description:
+          "The page may have moved, but the YouAses story is still unfolding.",
+      })}</div>`,
+    ),
+);
 
 console.log(
   `Prepared SEO metadata for ${pages.length} routes: ${urls.join(", ")}`,
