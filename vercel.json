@@ -1,0 +1,8 @@
+{
+  "buildCommand": "cd youases-main && npm run build",
+  "installCommand": "cd youases-main && npm install",
+  "outputDirectory": "youases-main/dist",
+  "framework": "vite",
+  "cleanUrls": true,
+  "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]
+}

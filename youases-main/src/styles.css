@@ -16,6 +16,32 @@
 .brand-lockup:hover {
   transform: translateY(-2px);
 }
+.social-dock {
+  animation: dock-in 1s 0.8s both;
+}
+.social-dock-link {
+  display: flex;
+  width: 2.25rem;
+  height: 2.25rem;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 999px;
+  color: #64748b;
+  background: rgba(7, 18, 38, 0.65);
+  backdrop-filter: blur(14px);
+  transition:
+    color 0.25s ease,
+    border-color 0.25s ease,
+    background 0.25s ease,
+    transform 0.25s ease;
+}
+.social-dock-link:hover {
+  color: white;
+  border-color: rgba(130, 170, 255, 0.55);
+  background: #10254a;
+  transform: translateY(-3px);
+}
 
 :root {
   --background: #050b18;
@@ -461,6 +487,17 @@
   from {
     opacity: 0;
     transform: translateX(100%);
+  }
+
+  @keyframes dock-in {
+    from {
+      opacity: 0;
+      transform: translateY(12px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
   to {
     opacity: 1;

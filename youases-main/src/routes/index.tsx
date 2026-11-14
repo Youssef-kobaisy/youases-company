@@ -116,21 +116,6 @@ function Nav({
         </span>
       </button>
       <button
-        onClick={() => navigate("/")}
-        className="brand-lockup fixed left-5 top-5 z-[55] flex items-center gap-3 sm:left-8 sm:top-8"
-        aria-label="Go to YouAses home"
-      >
-        <img src={logo} alt="" className="h-9 w-9 rounded-xl object-cover" />
-        <span className="hidden text-left sm:block">
-          <strong className="block font-display text-sm tracking-tight">
-            You<span className="text-[#82aaff]">Ases</span>
-          </strong>
-          <small className="block text-[9px] uppercase tracking-[.2em] text-slate-500">
-            Because you are Aces
-          </small>
-        </span>
-      </button>
-      <button
         onClick={() => setMenuOpen(!menuOpen)}
         className="menu-trigger fixed right-5 top-5 z-[60] flex items-center gap-3 rounded-full border border-white/15 bg-[#071226]/80 px-4 py-3 text-xs font-semibold uppercase tracking-[.18em] text-white backdrop-blur-xl sm:right-8 sm:top-8"
         aria-label={menuOpen ? "Close menu" : "Open menu"}
@@ -138,6 +123,21 @@ function Nav({
         <span>{menuOpen ? "Close" : "Menu"}</span>
         {menuOpen ? <X size={17} /> : <Menu size={17} />}
       </button>
+      <div className="social-dock fixed bottom-4 left-4 z-40 flex items-center gap-2 sm:bottom-6 sm:left-8">
+        {socialLinks.map(({ label, href, icon: Icon }) => (
+          <a
+            key={label}
+            href={href}
+            target="_blank"
+            rel="noreferrer"
+            aria-label={`YouAses on ${label}`}
+            title={label}
+            className="social-dock-link"
+          >
+            <Icon size={15} />
+          </a>
+        ))}
+      </div>
       {menuOpen && (
         <div className="menu-overlay fixed inset-0 z-50">
           <button
