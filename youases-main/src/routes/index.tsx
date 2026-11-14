@@ -37,16 +37,141 @@ const socialLinks = [
   },
 ];
 
+const routeMetadata: Record<
+  string,
+  { title: string; description: string; type?: string }
+> = {
+  "/": {
+    title: "YouAses | AI, software, and knowledge platforms",
+    description:
+      "YouAses is an independent technology company building AI systems, software products, and knowledge platforms for a more intelligent future.",
+  },
+  "/company": {
+    title: "About YouAses | Independent AI technology company",
+    description:
+      "Learn how YouAses combines artificial intelligence, software engineering, and product design to build useful technology for people shaping what comes next.",
+    type: "AboutPage",
+  },
+  "/platforms": {
+    title: "YouAses Platforms | Y-note and intelligent software",
+    description:
+      "Explore the AI systems, knowledge environments, and software products YouAses is building, including Y-note, a connected knowledge platform in development.",
+    type: "CollectionPage",
+  },
+  "/journal": {
+    title: "YouAses Journal | Ideas behind AI and software",
+    description:
+      "Read the YouAses Journal for clear thinking on artificial intelligence, human-centered software, knowledge systems, and the products taking shape in our studio.",
+    type: "CollectionPage",
+  },
+  "/contact": {
+    title: "Contact YouAses | Start a conversation",
+    description:
+      "Contact YouAses at hello@youases.work to follow our product releases, discuss technology, or start a conversation with the studio.",
+    type: "ContactPage",
+  },
+};
+
+function getMetadata(path: string) {
+  if (routeMetadata[path]) return routeMetadata[path];
+  if (path === "/journal/why-we-are-building-y-note") {
+    return {
+      title: "Why YouAses Is Building Y-note | YouAses Journal",
+      description:
+        "Y-note began with a question about what knowledge software could become when ideas, context, and discovery are connected.",
+      type: "Article",
+    };
+  }
+  if (path === "/journal/the-human-side-of-ai") {
+    return {
+      title: "The Human Side of AI | YouAses Journal",
+      description:
+        "YouAses explores why the future of AI should be measured by the clarity, capability, and agency it gives back to people.",
+      type: "Article",
+    };
+  }
+  if (path === "/journal/inside-the-youases-studio") {
+    return {
+      title: "Inside the YouAses Studio | YouAses Journal",
+      description:
+        "How YouAses moves from difficult human problems to useful AI systems, software products, and knowledge platforms.",
+      type: "Article",
+    };
+  }
+  return routeMetadata["/"];
+}
+
 export default function App() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [path, setPath] = useState(() => window.location.pathname);
+  const [scrollProgress, setScrollProgress] = useState(0);
   useReveal();
   useEffect(() => {
     const onPopState = () => setPath(window.location.pathname);
     window.addEventListener("popstate", onPopState);
     return () => window.removeEventListener("popstate", onPopState);
   }, []);
+  useEffect(() => {
+    const metadata = getMetadata(path);
+    document.title = metadata.title;
+    document.documentElement.lang = "en";
+    document
+      .querySelector('meta[name="description"]')
+      ?.setAttribute("content", metadata.description);
+    document
+      .querySelector('meta[property="og:title"]')
+      ?.setAttribute("content", metadata.title);
+    document
+      .querySelector('meta[property="og:description"]')
+      ?.setAttribute("content", metadata.description);
+    document
+      .querySelector('meta[name="twitter:title"]')
+      ?.setAttribute("content", metadata.title);
+    document
+      .querySelector('meta[name="twitter:description"]')
+      ?.setAttribute("content", metadata.description);
+    document
+      .querySelector('meta[property="og:type"]')
+      ?.setAttribute(
+        "content",
+        metadata.type === "Article" ? "article" : "website",
+      );
+    const canonical = document.querySelector<HTMLLinkElement>(
+      'link[rel="canonical"]',
+    );
+    if (canonical) {
+      canonical.href = `${window.location.origin}${path === "/" ? "" : path}`;
+    }
+  }, [path]);
+  useEffect(() => {
+    const updateProgress = () => {
+      const max = document.documentElement.scrollHeight - window.innerHeight;
+      setScrollProgress(max > 0 ? (window.scrollY / max) * 100 : 0);
+    };
+    updateProgress();
+    window.addEventListener("scroll", updateProgress, { passive: true });
+    window.addEventListener("resize", updateProgress);
+    return () => {
+      window.removeEventListener("scroll", updateProgress);
+      window.removeEventListener("resize", updateProgress);
+    };
+  }, [path]);
+  useEffect(() => {
+    document.body.style.overflow = menuOpen ? "hidden" : "";
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setMenuOpen(false);
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => {
+      document.body.style.overflow = "";
+      window.removeEventListener("keydown", onKeyDown);
+    };
+  }, [menuOpen]);
   function navigate(to: string) {
+    if (to === path) {
+      setMenuOpen(false);
+      return;
+    }
     window.history.pushState({}, "", to);
     setPath(to);
     setMenuOpen(false);
@@ -60,13 +185,18 @@ export default function App() {
 
   return (
     <div className="min-h-screen overflow-hidden bg-[#050b18] text-white">
+      <div
+        className="scroll-progress"
+        aria-hidden="true"
+        style={{ width: `${scrollProgress}%` }}
+      />
       <Nav
         menuOpen={menuOpen}
         setMenuOpen={setMenuOpen}
         currentPath={page}
         navigate={navigate}
       />
-      <main>
+      <main key={path} className="page-transition">
         {page === "/" && <HomePage navigate={navigate} />}
         {page === "/company" && <CompanyPage navigate={navigate} />}
         {page === "/platforms" && <PlatformsPage navigate={navigate} />}
@@ -119,6 +249,8 @@ function Nav({
         onClick={() => setMenuOpen(!menuOpen)}
         className="menu-trigger fixed right-5 top-5 z-[60] flex items-center gap-3 rounded-full border border-white/15 bg-[#071226]/80 px-4 py-3 text-xs font-semibold uppercase tracking-[.18em] text-white backdrop-blur-xl sm:right-8 sm:top-8"
         aria-label={menuOpen ? "Close menu" : "Open menu"}
+        aria-expanded={menuOpen}
+        aria-controls="site-menu"
       >
         <span>{menuOpen ? "Close" : "Menu"}</span>
         {menuOpen ? <X size={17} /> : <Menu size={17} />}
@@ -145,7 +277,11 @@ function Nav({
             onClick={() => setMenuOpen(false)}
             className="absolute inset-0 cursor-default bg-[#020611]/75 backdrop-blur-sm"
           />
-          <aside className="menu-panel absolute right-0 top-0 flex h-full w-full max-w-[430px] flex-col justify-between border-l border-white/10 bg-[#071226] p-7 pt-28 shadow-2xl sm:p-10 sm:pt-32">
+          <aside
+            id="site-menu"
+            className="menu-panel absolute right-0 top-0 flex h-full w-full max-w-[430px] flex-col justify-between border-l border-white/10 bg-[#071226] p-7 pt-28 shadow-2xl sm:p-10 sm:pt-32"
+            aria-label="YouAses navigation"
+          >
             <div>
               <div className="flex items-center gap-3 border-b border-white/10 pb-7">
                 <img

@@ -205,6 +205,10 @@ function updateHtml(html, page) {
       `<meta property="og:url" content="${url}"`,
     )
     .replace(
+      /<meta property="og:type" content="[^"]*"/,
+      `<meta property="og:type" content="${page.type === "Article" ? "article" : "website"}"`,
+    )
+    .replace(
       /<meta name="twitter:title" content="[^"]*"/,
       `<meta name="twitter:title" content="${escapeHtml(page.title)}"`,
     )
