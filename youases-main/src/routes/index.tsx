@@ -1,36 +1,59 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import {
-  ArrowRight,
-  Sparkles,
-  Cpu,
-  Layers,
-  Zap,
-  Brain,
-  ShieldCheck,
-  Rocket,
-  Mail,
+  ArrowUpRight,
+  BrainCircuit,
+  Check,
+  ChevronDown,
   Facebook,
+  Globe2,
   Instagram,
+  Layers3,
+  Linkedin,
+  Mail,
+  Menu,
+  MoveUpRight,
+  Orbit,
+  Rocket,
+  ShieldCheck,
+  Sparkles,
+  X,
+  Zap,
 } from "lucide-react";
-import { SiteNav } from "@/components/SiteNav";
-import { BackgroundFX } from "@/components/BackgroundFX";
-import { useReveal } from "@/hooks/use-reveal";
-import { supabase } from "@/integrations/supabase/client";
 import logo from "@/assets/youases-logo.png";
+import { supabase } from "@/integrations/supabase/client";
+import { useReveal } from "@/hooks/use-reveal";
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "YouAses — Building the future of digital innovation" },
-      { name: "description", content: "YouAses is a modern technology company building intelligent digital solutions, AI, and software for the next generation." },
-      { property: "og:title", content: "YouAses — Building the future of digital innovation" },
-      { property: "og:description", content: "Modern technology company building intelligent digital solutions, AI, and advanced software." },
+      { title: "YouAses | Technology for the next leap" },
+      {
+        name: "description",
+        content:
+          "YouAses is an independent technology company building intelligent products, thoughtful software, and digital experiences for a better future.",
+      },
+      {
+        name: "keywords",
+        content:
+          "YouAses, technology company, AI, software, Y-note, digital products",
+      },
+      {
+        property: "og:title",
+        content: "YouAses | Technology for the next leap",
+      },
+      {
+        property: "og:description",
+        content:
+          "YouAses builds intelligent products and meaningful digital experiences.",
+      },
       { property: "og:type", content: "website" },
-      { property: "og:url", content: "/" },
+      { property: "og:url", content: "https://youases.work" },
+      { property: "og:image", content: "https://youases.work/og-image.png" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
     links: [
-      { rel: "canonical", href: "/" },
+      { rel: "canonical", href: "https://youases.work" },
       { rel: "icon", type: "image/png", href: logo },
     ],
     scripts: [
@@ -40,15 +63,17 @@ export const Route = createFileRoute("/")({
           "@context": "https://schema.org",
           "@type": "Organization",
           name: "YouAses",
-          url: "/",
-          logo,
+          url: "https://youases.work",
+          logo: "https://youases.work/favicon.ico",
+          slogan: "Because you are Aces.",
           description:
-            "YouAses is a modern technology company building intelligent digital solutions, AI, and software for the next generation.",
+            "YouAses is an independent technology company building intelligent products and digital experiences.",
+          email: "youases.official@gmail.com",
           sameAs: [
             "https://www.facebook.com/profile.php?id=61590554395056",
             "https://www.instagram.com/youases.official",
+            "https://www.linkedin.com/company/youases",
           ],
-          email: "youases.official@gmail.com",
         }),
       },
     ],
@@ -56,18 +81,93 @@ export const Route = createFileRoute("/")({
   component: Index,
 });
 
+const socialLinks = [
+  {
+    label: "Instagram",
+    href: "https://www.instagram.com/youases.official",
+    icon: Instagram,
+  },
+  {
+    label: "Facebook",
+    href: "https://www.facebook.com/profile.php?id=61590554395056",
+    icon: Facebook,
+  },
+  {
+    label: "LinkedIn",
+    href: "https://www.linkedin.com/company/youases",
+    icon: Linkedin,
+  },
+];
+
 function Index() {
   useReveal();
+  const [menuOpen, setMenuOpen] = useState(false);
+
   return (
-    <div className="relative min-h-screen text-foreground overflow-x-hidden">
-      <BackgroundFX />
-      <SiteNav />
+    <div className="min-h-screen overflow-x-hidden bg-background text-foreground">
+      <header className="fixed inset-x-0 top-0 z-50 px-4 pt-4 sm:px-8">
+        <div className="mx-auto flex max-w-7xl items-center justify-between rounded-full border border-white/10 bg-[#071226]/75 px-4 py-3 shadow-2xl shadow-black/20 backdrop-blur-xl sm:px-5">
+          <a
+            href="#home"
+            className="flex items-center gap-3"
+            aria-label="YouAses home"
+          >
+            <img
+              src={logo}
+              alt=""
+              className="h-9 w-9 rounded-xl object-cover shadow-[0_0_24px_rgba(87,151,255,.35)]"
+            />
+            <span className="font-display text-lg font-bold tracking-tight">
+              You<span className="text-primary">Ases</span>
+            </span>
+          </a>
+          <nav className="hidden items-center gap-8 md:flex">
+            {["About", "Products", "Approach", "Contact"].map((item) => (
+              <a
+                key={item}
+                href={`#${item.toLowerCase()}`}
+                className="text-sm text-slate-400 transition hover:text-white"
+              >
+                {item}
+              </a>
+            ))}
+          </nav>
+          <a
+            href="#products"
+            className="hidden items-center gap-2 rounded-full bg-white px-4 py-2 text-sm font-semibold text-[#071226] transition hover:bg-primary hover:text-white sm:inline-flex"
+          >
+            Explore Y-note <ArrowUpRight size={15} />
+          </a>
+          <button
+            className="rounded-full p-2 text-slate-200 md:hidden"
+            onClick={() => setMenuOpen((open) => !open)}
+            aria-label="Toggle menu"
+          >
+            {menuOpen ? <X size={21} /> : <Menu size={21} />}
+          </button>
+        </div>
+        {menuOpen && (
+          <nav className="mx-1 mt-2 flex flex-col gap-1 rounded-3xl border border-white/10 bg-[#071226]/95 p-3 backdrop-blur-xl md:hidden">
+            {["About", "Products", "Approach", "Contact"].map((item) => (
+              <a
+                key={item}
+                href={`#${item.toLowerCase()}`}
+                onClick={() => setMenuOpen(false)}
+                className="rounded-2xl px-4 py-3 text-sm text-slate-300 hover:bg-white/5"
+              >
+                {item}
+              </a>
+            ))}
+          </nav>
+        )}
+      </header>
+
       <main>
         <Hero />
-        <Stats />
+        <Marquee />
         <About />
-        <Vision />
-        <Technology />
+        <Products />
+        <Approach />
         <Waitlist />
         <Contact />
       </main>
@@ -78,216 +178,322 @@ function Index() {
 
 function Hero() {
   return (
-    <section id="home" className="relative pt-32 sm:pt-40 pb-24 sm:pb-32 px-5 sm:px-8">
-      <div className="max-w-5xl mx-auto text-center flex flex-col items-center">
-        <div className="inline-flex items-center gap-2 px-4 py-1.5 mb-8 rounded-full glass text-xs sm:text-sm text-muted-foreground animate-fade-up">
-          <Sparkles size={14} className="text-primary" />
-          <span>The next generation of digital experiences</span>
-        </div>
-
-        <div className="relative animate-fade-up" style={{ animationDelay: "0.1s" }}>
-          <div className="absolute inset-0 -m-10 rounded-full bg-primary/20 blur-3xl" />
-          <img
-            src={logo}
-            alt="YouAses logo"
-            className="relative w-36 sm:w-48 md:w-56 h-auto animate-pulse-glow"
-          />
-        </div>
-
-        <h1 className="mt-6 text-5xl sm:text-6xl md:text-7xl font-semibold tracking-tight animate-fade-up" style={{ animationDelay: "0.2s", fontFamily: "'Space Grotesk', sans-serif" }}>
-          You<span className="text-gradient">Ases</span>
-        </h1>
-        <div className="mt-3 h-px w-16 bg-gradient-to-r from-transparent via-primary to-transparent" />
-
-        <h2 className="mt-8 text-3xl sm:text-5xl md:text-6xl font-semibold tracking-tight max-w-4xl leading-[1.1] animate-fade-up" style={{ animationDelay: "0.3s", fontFamily: "'Space Grotesk', sans-serif" }}>
-          Building the future of <span className="text-gradient">digital innovation.</span>
-        </h2>
-
-        <p className="mt-6 max-w-2xl text-base sm:text-lg text-muted-foreground leading-relaxed animate-fade-up" style={{ animationDelay: "0.4s" }}>
-          We create innovative digital technologies designed to improve
-          people's lives, learning experiences, and future opportunities.
-        </p>
-
-        <div className="mt-10 flex flex-col sm:flex-row items-center gap-4 animate-fade-up" style={{ animationDelay: "0.5s" }}>
-          <a
-            href="#waitlist"
-            className="group inline-flex items-center gap-2 px-7 py-3.5 rounded-full bg-primary text-primary-foreground font-medium text-sm shadow-[0_0_30px_oklch(0.72_0.18_250/0.5)] hover:shadow-[0_0_50px_oklch(0.72_0.18_250/0.8)] hover:scale-[1.03] transition-all"
-          >
-            Coming Soon
-            <ArrowRight size={16} className="group-hover:translate-x-0.5 transition-transform" />
-          </a>
-          <a href="#about" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-            Discover our vision →
-          </a>
-        </div>
-      </div>
-
-      <div className="pointer-events-none absolute left-1/2 -translate-x-1/2 bottom-0 h-px w-[80%] bg-gradient-to-r from-transparent via-primary to-transparent" />
-      <div className="pointer-events-none absolute left-1/2 -translate-x-1/2 bottom-0 h-32 w-[60%] bg-primary/20 blur-3xl rounded-full" />
-    </section>
-  );
-}
-
-function Stats() {
-  const items = [
-    { k: "AI", v: "First" },
-    { k: "∞", v: "Possibilities" },
-    { k: "24/7", v: "Innovation" },
-    { k: "2026", v: "Launching" },
-  ];
-  return (
-    <section className="relative px-5 sm:px-8 -mt-10">
-      <div className="max-w-5xl mx-auto reveal">
-        <div className="grid grid-cols-2 sm:grid-cols-4 rounded-2xl glass overflow-hidden">
-          {items.map((s, i) => (
-            <div
-              key={s.v}
-              className={`p-6 sm:p-8 text-center ${i !== 0 ? "border-l border-border/30" : ""} ${
-                i >= 2 ? "border-t sm:border-t-0 border-border/30" : ""
-              }`}
+    <section
+      id="home"
+      className="relative isolate flex min-h-[760px] items-center overflow-hidden px-5 pb-24 pt-40 sm:px-8"
+    >
+      <div className="hero-grid absolute inset-0 -z-10" />
+      <div className="absolute left-[8%] top-32 -z-10 h-72 w-72 rounded-full bg-primary/20 blur-[120px]" />
+      <div className="absolute bottom-0 right-[4%] -z-10 h-96 w-96 rounded-full bg-cyan-400/10 blur-[130px]" />
+      <div className="mx-auto grid w-full max-w-7xl items-center gap-16 lg:grid-cols-[1.05fr_.95fr]">
+        <div>
+          <div className="reveal inline-flex items-center gap-2 rounded-full border border-primary/25 bg-primary/10 px-4 py-2 text-xs font-medium uppercase tracking-[.2em] text-blue-200">
+            <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-cyan-300" />{" "}
+            Independent technology company
+          </div>
+          <h1 className="reveal mt-7 max-w-4xl font-display text-5xl font-semibold leading-[.98] tracking-[-.055em] sm:text-7xl lg:text-[6.6rem]">
+            The next leap
+            <span className="block text-gradient">starts with you.</span>
+          </h1>
+          <p className="reveal mt-7 max-w-xl text-base leading-8 text-slate-400 sm:text-lg">
+            YouAses builds intelligent products and digital experiences that
+            turn ambitious ideas into useful, beautiful momentum.
+          </p>
+          <div className="reveal mt-9 flex flex-wrap items-center gap-4">
+            <a
+              href="#products"
+              className="group inline-flex items-center gap-3 rounded-full bg-primary px-6 py-3.5 text-sm font-semibold text-white shadow-[0_0_35px_rgba(76,139,255,.3)] transition hover:-translate-y-0.5 hover:bg-blue-400"
             >
-              <div className="text-2xl sm:text-3xl font-semibold text-gradient" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
-                {s.k}
-              </div>
-              <div className="mt-1.5 text-[11px] tracking-[0.2em] uppercase text-muted-foreground">{s.v}</div>
+              Discover what&apos;s next{" "}
+              <MoveUpRight
+                size={17}
+                className="transition group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+              />
+            </a>
+            <a
+              href="#about"
+              className="inline-flex items-center gap-2 rounded-full border border-white/15 px-6 py-3.5 text-sm font-semibold text-slate-200 transition hover:border-primary/50 hover:bg-white/5"
+            >
+              Our point of view <ChevronDown size={16} />
+            </a>
+          </div>
+          <div className="reveal mt-14 flex items-center gap-5 text-xs text-slate-500">
+            <div className="flex -space-x-2">
+              {[Sparkles, Orbit, Zap].map((Icon, index) => (
+                <span
+                  key={index}
+                  className="flex h-8 w-8 items-center justify-center rounded-full border border-[#071226] bg-[#122a51] text-primary"
+                >
+                  <Icon size={14} />
+                </span>
+              ))}
             </div>
-          ))}
+            <span>Ideas engineered for the real world</span>
+          </div>
+        </div>
+        <div className="reveal relative mx-auto w-full max-w-[500px]">
+          <div className="hero-orbit absolute inset-4 rounded-full border border-primary/20" />
+          <div className="hero-orbit hero-orbit-reverse absolute inset-14 rounded-full border border-cyan-300/15" />
+          <div className="relative mx-auto aspect-square w-[82%] rounded-[36%] border border-white/10 bg-gradient-to-br from-[#143668] via-[#0e2345] to-[#071226] p-5 shadow-[0_30px_100px_rgba(0,0,0,.4)] rotate-6">
+            <div className="flex h-full flex-col justify-between rounded-[30%] border border-white/10 bg-[#09182f]/90 p-7 -rotate-6">
+              <div className="flex items-center justify-between">
+                <span className="text-xs uppercase tracking-[.25em] text-blue-200/70">
+                  YouAses / 01
+                </span>
+                <span className="h-2 w-2 rounded-full bg-cyan-300 shadow-[0_0_15px_#67e8f9]" />
+              </div>
+              <div className="relative flex items-center justify-center">
+                <div className="absolute h-44 w-44 rounded-full bg-primary/30 blur-3xl" />
+                <img
+                  src={logo}
+                  alt="YouAses symbol"
+                  className="relative w-44 rounded-[28%] shadow-[0_0_60px_rgba(80,145,255,.45)]"
+                />
+              </div>
+              <div className="flex items-end justify-between">
+                <div>
+                  <div className="font-display text-2xl font-semibold">
+                    YouAses
+                  </div>
+                  <div className="mt-1 text-xs text-slate-500">
+                    Because you are Aces.
+                  </div>
+                </div>
+                <Globe2 className="text-primary/70" size={25} />
+              </div>
+            </div>
+          </div>
+          <div className="absolute -bottom-5 -left-3 rounded-2xl border border-white/10 bg-[#0b1c38]/90 px-4 py-3 shadow-xl backdrop-blur-md">
+            <div className="text-[10px] uppercase tracking-[.2em] text-slate-500">
+              Signal detected
+            </div>
+            <div className="mt-1 flex items-center gap-2 text-sm font-medium">
+              <span className="h-2 w-2 rounded-full bg-emerald-400" /> Building
+              the future
+            </div>
+          </div>
         </div>
       </div>
     </section>
   );
 }
 
-function SectionHeader({ tag, title, subtitle }: { tag: string; title: React.ReactNode; subtitle?: string }) {
+function Marquee() {
   return (
-    <div className="max-w-3xl reveal">
-      <div className="text-xs tracking-[0.25em] uppercase text-primary font-medium">{tag}</div>
-      <h2 className="mt-4 text-3xl sm:text-5xl font-semibold tracking-tight leading-[1.1]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
+    <div className="border-y border-white/10 bg-white/[.025] py-5">
+      <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-center gap-x-10 gap-y-3 px-5 text-[10px] uppercase tracking-[.3em] text-slate-500 sm:justify-between sm:px-8">
+        <span>Intelligence</span>
+        <span className="text-primary">✦</span>
+        <span>Product design</span>
+        <span className="text-primary">✦</span>
+        <span>Human potential</span>
+        <span className="text-primary">✦</span>
+        <span>Tomorrow, deliberately</span>
+      </div>
+    </div>
+  );
+}
+
+function SectionHeading({
+  eyebrow,
+  title,
+  copy,
+}: {
+  eyebrow: string;
+  title: React.ReactNode;
+  copy?: string;
+}) {
+  return (
+    <div className="reveal max-w-2xl">
+      <div className="text-xs font-medium uppercase tracking-[.25em] text-primary">
+        {eyebrow}
+      </div>
+      <h2 className="mt-4 font-display text-4xl font-semibold leading-[1.05] tracking-[-.04em] sm:text-6xl">
         {title}
       </h2>
-      {subtitle && <p className="mt-5 text-base sm:text-lg text-muted-foreground leading-relaxed">{subtitle}</p>}
+      {copy && (
+        <p className="mt-5 text-base leading-8 text-slate-400">{copy}</p>
+      )}
     </div>
   );
 }
 
 function About() {
-  const pillars = [
-    { icon: Layers, title: "Simplicity", text: "Complex made effortless through clean, intuitive design." },
-    { icon: Zap, title: "Performance", text: "Engineered for speed, scale, and reliability." },
-    { icon: Brain, title: "Intelligence", text: "Smart systems that adapt to people, not the opposite." },
+  const principles = [
+    {
+      icon: BrainCircuit,
+      title: "Think deeper",
+      text: "We look beyond the obvious to find the signal that moves people forward.",
+    },
+    {
+      icon: Layers3,
+      title: "Make it useful",
+      text: "Great technology earns its place by making everyday life feel more possible.",
+    },
+    {
+      icon: ShieldCheck,
+      title: "Build with care",
+      text: "Trust, privacy, and craft are not features. They are the foundation.",
+    },
   ];
   return (
-    <section id="about" className="relative px-5 sm:px-8 py-24 sm:py-32">
-      <div className="max-w-6xl mx-auto">
-        <SectionHeader
-          tag="Who We Are"
-          title={<>Innovation. Simplicity. <span className="text-gradient">Impact.</span></>}
-        />
-        <div className="mt-12 grid lg:grid-cols-5 gap-8">
-          <div className="lg:col-span-2 space-y-5 text-muted-foreground leading-relaxed">
-            <p>
-              YouAses is an innovative technology company focused on creating
-              modern digital solutions and intelligent technologies that help
-              people in their daily lives, education, productivity, and future development.
-            </p>
-            <p>We believe technology should be simple, powerful, and meaningful.</p>
-            <p>
-              Our team is building unique technologies and advanced digital experiences
-              that will be revealed soon — including future innovations in artificial
-              intelligence, software, and smart digital systems.
-            </p>
-          </div>
-          <div className="lg:col-span-3 grid sm:grid-cols-2 gap-5">
-            {pillars.map((p, i) => (
-              <div
-                key={p.title}
-                className={`group reveal relative rounded-2xl p-6 glass hover:border-primary/40 transition-all hover:-translate-y-1 ${
-                  i === 2 ? "sm:col-span-2" : ""
-                }`}
-                style={{ transitionDelay: `${i * 80}ms` }}
-              >
-                <div className="h-11 w-11 rounded-xl bg-primary/15 flex items-center justify-center text-primary mb-4 group-hover:shadow-[0_0_20px_oklch(0.72_0.18_250/0.5)] transition-shadow">
-                  <p.icon size={20} />
-                </div>
-                <h3 className="text-lg font-semibold" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>{p.title}</h3>
-                <p className="mt-2 text-sm text-muted-foreground leading-relaxed">{p.text}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function Vision() {
-  const orbitIcons = [Rocket, ShieldCheck, Sparkles, Cpu];
-  return (
-    <section id="vision" className="relative px-5 sm:px-8 py-24 sm:py-32">
-      <div className="max-w-6xl mx-auto grid lg:grid-cols-2 gap-12 items-center">
-        <div>
-          <SectionHeader
-            tag="Our Vision"
-            title={<>A smarter <span className="text-gradient">digital future.</span></>}
-            subtitle="Our vision is to shape a smarter digital future through innovation, creativity, and advanced technology. We aim to create powerful solutions that inspire people, simplify complex tasks, and unlock new possibilities in learning, communication, and digital experiences."
+    <section id="about" className="px-5 py-28 sm:px-8 sm:py-36">
+      <div className="mx-auto max-w-7xl">
+        <div className="grid gap-14 lg:grid-cols-[.8fr_1.2fr] lg:gap-28">
+          <SectionHeading
+            eyebrow="01 / The company"
+            title={
+              <>
+                Small team.
+                <br />
+                <span className="text-gradient">Big signal.</span>
+              </>
+            }
           />
-        </div>
-        <div className="relative aspect-square max-w-md mx-auto w-full">
-          <div className="absolute inset-0 rounded-full bg-primary/15 blur-3xl" />
-          <div className="absolute inset-0 rounded-full border border-primary/20" />
-          <div className="absolute inset-6 rounded-full border border-primary/15" />
-          <div className="absolute inset-12 rounded-full border border-primary/10" />
-          <div className="absolute inset-0 flex items-center justify-center">
-            <img src={logo} alt="" className="w-28 h-28 animate-float drop-shadow-[0_0_30px_oklch(0.72_0.18_250/0.6)]" />
+          <div>
+            <p className="reveal text-xl leading-9 text-slate-200 sm:text-2xl">
+              YouAses is a technology company for the curious, the bold, and the
+              people who see a better way before it exists.
+            </p>
+            <p className="reveal mt-6 max-w-2xl text-base leading-8 text-slate-400">
+              We combine product thinking, intelligent systems, and expressive
+              design to create tools that help people learn, work, and imagine
+              further. No noise. Just meaningful progress.
+            </p>
+            <div className="mt-10 grid gap-4 sm:grid-cols-3">
+              {principles.map(({ icon: Icon, title, text }) => (
+                <div
+                  key={title}
+                  className="reveal rounded-3xl border border-white/10 bg-white/[.03] p-5 transition hover:-translate-y-1 hover:border-primary/40"
+                >
+                  <Icon className="text-primary" size={21} />
+                  <h3 className="mt-7 font-display font-semibold">{title}</h3>
+                  <p className="mt-2 text-sm leading-6 text-slate-500">
+                    {text}
+                  </p>
+                </div>
+              ))}
+            </div>
           </div>
-          {orbitIcons.map((Icon, i) => {
-            const angle = (i / 4) * Math.PI * 2 - Math.PI / 2;
-            const r = 44;
-            const x = 50 + Math.cos(angle) * r;
-            const y = 50 + Math.sin(angle) * r;
-            return (
-              <div
-                key={i}
-                className="absolute h-11 w-11 -translate-x-1/2 -translate-y-1/2 rounded-xl glass flex items-center justify-center text-primary"
-                style={{ left: `${x}%`, top: `${y}%`, animation: `float ${5 + i}s ease-in-out ${i * 0.4}s infinite` }}
-              >
-                <Icon size={18} />
-              </div>
-            );
-          })}
         </div>
       </div>
     </section>
   );
 }
 
-function Technology() {
-  const cards = [
-    { icon: Brain, title: "Artificial Intelligence", text: "Adaptive intelligence built around real human needs." },
-    { icon: Cpu, title: "Advanced Software", text: "Robust digital systems designed for scale and precision." },
-    { icon: Layers, title: "Smart Experiences", text: "Seamless, beautiful interfaces that feel inevitable." },
-    { icon: ShieldCheck, title: "Trust by Design", text: "Privacy, security, and resilience at the core." },
+function Products() {
+  return (
+    <section id="products" className="relative px-5 py-28 sm:px-8 sm:py-36">
+      <div className="absolute inset-0 -z-10 bg-gradient-to-b from-transparent via-primary/[.06] to-transparent" />
+      <div className="mx-auto max-w-7xl">
+        <SectionHeading
+          eyebrow="02 / The first signal"
+          title={
+            <>
+              Something useful
+              <br />
+              <span className="text-gradient">is almost here.</span>
+            </>
+          }
+          copy="Our first product is being shaped in the open. Built for focus, clarity, and the ideas that deserve your full attention."
+        />
+        <div className="reveal mt-14 overflow-hidden rounded-[2rem] border border-blue-300/20 bg-gradient-to-br from-[#102b55] via-[#0b1b38] to-[#081329] shadow-[0_30px_90px_rgba(0,0,0,.3)]">
+          <div className="grid items-center gap-10 p-7 sm:p-12 lg:grid-cols-[1fr_.8fr] lg:p-16">
+            <div>
+              <div className="flex items-center gap-3">
+                <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/10 p-2">
+                  <img src={logo} alt="" className="rounded-xl" />
+                </span>
+                <div>
+                  <span className="text-xs uppercase tracking-[.25em] text-blue-200/70">
+                    YouAses presents
+                  </span>
+                  <h3 className="font-display text-2xl font-bold">Y-note</h3>
+                </div>
+              </div>
+              <div className="mt-9 inline-flex items-center gap-2 rounded-full border border-cyan-200/20 bg-cyan-200/10 px-3 py-1.5 text-xs font-medium text-cyan-100">
+                <Rocket size={13} /> Coming soon
+              </div>
+              <h3 className="mt-5 max-w-xl font-display text-4xl font-semibold tracking-[-.04em] sm:text-5xl">
+                Your thoughts,
+                <br />
+                <span className="text-gradient">with more room to grow.</span>
+              </h3>
+              <p className="mt-5 max-w-lg text-base leading-8 text-slate-300/75">
+                A thoughtful space for notes, ideas, and the sparks between
+                them. Y-note is designed to help you capture what matters and
+                return to it with a clearer mind.
+              </p>
+              <a
+                href="#waitlist"
+                className="mt-8 inline-flex items-center gap-2 text-sm font-semibold text-white hover:text-cyan-200"
+              >
+                Get launch access <ArrowUpRight size={16} />
+              </a>
+            </div>
+            <div className="relative mx-auto w-full max-w-sm">
+              <div className="absolute inset-8 rounded-full bg-cyan-300/20 blur-3xl" />
+              <div className="relative rounded-[2rem] border border-white/15 bg-[#07152d]/80 p-4 shadow-2xl rotate-3">
+                <div className="rounded-[1.5rem] border border-white/10 bg-[#0c1e3b] p-5">
+                  <div className="flex items-center justify-between text-[10px] uppercase tracking-[.2em] text-slate-500">
+                    <span>Y-note</span>
+                    <span>Today</span>
+                  </div>
+                  <div className="mt-10 text-2xl font-semibold">
+                    Make space
+                    <br />
+                    <span className="text-primary">for the next idea.</span>
+                  </div>
+                  <div className="mt-16 h-1 w-20 rounded-full bg-primary" />
+                  <div className="mt-4 flex gap-2">
+                    <span className="h-1.5 w-16 rounded-full bg-white/10" />
+                    <span className="h-1.5 w-8 rounded-full bg-white/10" />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function Approach() {
+  const steps = [
+    "Observe the real problem",
+    "Shape the simplest useful idea",
+    "Build, learn, and make it matter",
   ];
   return (
-    <section id="technology" className="relative px-5 sm:px-8 py-24 sm:py-32">
-      <div className="max-w-6xl mx-auto">
-        <SectionHeader
-          tag="Innovation & Technology"
-          title={<>The engine behind <span className="text-gradient">tomorrow.</span></>}
-          subtitle="At YouAses, we are developing our own technologies and digital systems designed for the next generation of intelligent experiences. From artificial intelligence to advanced software, we combine simplicity, performance, and innovation."
+    <section id="approach" className="px-5 py-28 sm:px-8 sm:py-36">
+      <div className="mx-auto grid max-w-7xl gap-14 lg:grid-cols-[.9fr_1.1fr]">
+        <SectionHeading
+          eyebrow="03 / The approach"
+          title={
+            <>
+              Clarity is a<br />
+              <span className="text-gradient">competitive edge.</span>
+            </>
+          }
+          copy="We work at the intersection of strategy, technology, and human behavior. Every detail has a job."
         />
-        <div className="mt-14 grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
-          {cards.map((c) => (
+        <div className="space-y-4">
+          {steps.map((step, index) => (
             <div
-              key={c.title}
-              className="group reveal relative rounded-2xl p-6 glass hover:border-primary/40 hover:-translate-y-1 transition-all overflow-hidden"
+              key={step}
+              className="reveal group flex items-center gap-5 rounded-3xl border border-white/10 bg-white/[.025] p-5 transition hover:border-primary/40 hover:bg-primary/[.06] sm:p-7"
             >
-              <div className="absolute -top-16 -right-16 h-32 w-32 rounded-full bg-primary/20 blur-3xl opacity-0 group-hover:opacity-100 transition-opacity" />
-              <div className="relative h-12 w-12 rounded-xl bg-gradient-to-br from-primary/30 to-primary/5 flex items-center justify-center text-primary mb-5 border border-primary/20">
-                <c.icon size={22} />
-              </div>
-              <h3 className="text-lg font-semibold" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>{c.title}</h3>
-              <p className="mt-2 text-sm text-muted-foreground leading-relaxed">{c.text}</p>
+              <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-primary/10 font-display text-lg font-semibold text-primary">
+                0{index + 1}
+              </span>
+              <span className="font-display text-lg font-medium text-slate-200 sm:text-xl">
+                {step}
+              </span>
+              <ArrowUpRight
+                className="ml-auto text-slate-600 transition group-hover:-translate-y-1 group-hover:translate-x-1 group-hover:text-primary"
+                size={19}
+              />
             </div>
           ))}
         </div>
@@ -298,66 +504,108 @@ function Technology() {
 
 function Waitlist() {
   const [email, setEmail] = useState("");
-  const [submitted, setSubmitted] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-
-  const onSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const [status, setStatus] = useState<
+    "idle" | "loading" | "success" | "error"
+  >("idle");
+  async function submit(event: React.FormEvent) {
+    event.preventDefault();
     if (!email) return;
-    setLoading(true);
-    setError(null);
-    const { error: dbError } = await supabase
+    setStatus("loading");
+    const { error } = await supabase
       .from("waitlist_subscribers")
-      .insert({ email, source: "landing" });
-    setLoading(false);
-    if (dbError) {
-      if (dbError.code === "23505") {
-        setSubmitted(true);
-      } else {
-        setError("Something went wrong. Please try again.");
-      }
-      return;
-    }
-    setSubmitted(true);
-  };
-
+      .insert({ email, source: "y-note" });
+    if (error && error.code !== "23505") setStatus("error");
+    else setStatus("success");
+  }
   return (
-    <section id="waitlist" className="relative px-5 sm:px-8 py-24 sm:py-32">
-      <div className="max-w-4xl mx-auto">
-        <div className="relative rounded-3xl glass p-8 sm:p-14 overflow-hidden">
-          <div className="absolute -top-24 -right-24 h-64 w-64 rounded-full bg-primary/25 blur-3xl" />
-          <div className="absolute -bottom-24 -left-24 h-64 w-64 rounded-full bg-accent/20 blur-3xl" />
-          <div className="relative flex flex-col items-center text-center">
-            <div className="h-14 w-14 rounded-2xl bg-primary/15 border border-primary/30 flex items-center justify-center text-primary mb-6">
-              <Mail size={22} />
-            </div>
-            <h3 className="text-3xl sm:text-4xl font-semibold tracking-tight" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
-              Be the first to know <span className="text-gradient">when we launch.</span>
-            </h3>
-            <p className="mt-3 text-muted-foreground max-w-md">Stay updated with our journey. No spam, just milestones.</p>
-            <form
-              onSubmit={onSubmit}
-              className="mt-8 w-full max-w-lg flex flex-col sm:flex-row gap-3"
+    <section id="waitlist" className="px-5 py-20 sm:px-8 sm:py-28">
+      <div className="relative mx-auto max-w-5xl overflow-hidden rounded-[2rem] border border-primary/25 bg-primary/[.08] p-8 text-center sm:p-16">
+        <div className="absolute left-1/2 top-0 h-56 w-96 -translate-x-1/2 rounded-full bg-primary/20 blur-[100px]" />
+        <div className="relative">
+          <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-primary/15 text-primary">
+            <Mail size={21} />
+          </div>
+          <h2 className="mt-6 font-display text-3xl font-semibold tracking-[-.03em] sm:text-5xl">
+            Be there when it goes live.
+          </h2>
+          <p className="mx-auto mt-4 max-w-md text-slate-400">
+            Join the early list for Y-note updates, private previews, and launch
+            access.
+          </p>
+          <form
+            onSubmit={submit}
+            className="mx-auto mt-8 flex max-w-lg flex-col gap-3 sm:flex-row"
+          >
+            <input
+              type="email"
+              required
+              value={email}
+              onChange={(event) => setEmail(event.target.value)}
+              disabled={status === "loading" || status === "success"}
+              placeholder="you@company.com"
+              className="min-w-0 flex-1 rounded-full border border-white/15 bg-black/20 px-5 py-3.5 text-sm text-white outline-none placeholder:text-slate-600 focus:border-primary"
+            />
+            <button
+              type="submit"
+              disabled={status === "loading" || status === "success"}
+              className="inline-flex items-center justify-center gap-2 rounded-full bg-white px-6 py-3.5 text-sm font-semibold text-[#071226] transition hover:bg-cyan-200 disabled:opacity-70"
             >
-              <input
-                type="email"
-                required
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="Enter your email"
-                disabled={submitted || loading}
-                className="flex-1 px-5 py-3.5 rounded-full bg-input/60 border border-border text-sm placeholder:text-muted-foreground focus:outline-none focus:border-primary focus:shadow-[0_0_20px_oklch(0.72_0.18_250/0.3)] transition-all"
-              />
-              <button
-                type="submit"
-                disabled={submitted || loading}
-                className="px-7 py-3.5 rounded-full bg-primary text-primary-foreground text-sm font-medium hover:shadow-[0_0_30px_oklch(0.72_0.18_250/0.7)] hover:scale-[1.02] transition-all"
+              {status === "success" ? (
+                <>
+                  <Check size={16} /> You&apos;re on the list
+                </>
+              ) : status === "loading" ? (
+                "Joining..."
+              ) : (
+                "Keep me posted"
+              )}
+            </button>
+          </form>
+          {status === "error" && (
+            <p className="mt-4 text-sm text-red-300">
+              We couldn&apos;t save that email. Please try again.
+            </p>
+          )}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function Contact() {
+  return (
+    <section id="contact" className="px-5 py-28 sm:px-8 sm:py-36">
+      <div className="mx-auto flex max-w-7xl flex-col justify-between gap-10 border-t border-white/10 pt-12 sm:flex-row">
+        <div>
+          <div className="text-xs uppercase tracking-[.25em] text-primary">
+            04 / Keep in touch
+          </div>
+          <h2 className="mt-4 max-w-xl font-display text-4xl font-semibold tracking-[-.04em] sm:text-5xl">
+            Have a good idea?
+            <br />
+            <span className="text-gradient">Let&apos;s make it real.</span>
+          </h2>
+        </div>
+        <div className="sm:text-right">
+          <a
+            href="mailto:youases.official@gmail.com"
+            className="font-display text-lg font-medium text-white hover:text-primary"
+          >
+            youases.official@gmail.com
+          </a>
+          <div className="mt-5 flex gap-3 sm:justify-end">
+            {socialLinks.map(({ label, href, icon: Icon }) => (
+              <a
+                key={label}
+                href={href}
+                target="_blank"
+                rel="noreferrer"
+                aria-label={label}
+                className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 text-slate-400 transition hover:border-primary/50 hover:text-primary"
               >
-                {submitted ? "You're in ✓" : loading ? "Saving..." : "Notify Me"}
-              </button>
-            </form>
-            {error && <p className="mt-4 text-sm text-destructive">{error}</p>}
+                <Icon size={17} />
+              </a>
+            ))}
           </div>
         </div>
       </div>
@@ -365,58 +613,22 @@ function Waitlist() {
   );
 }
 
-const socials = [
-  { name: "Facebook", icon: Facebook, href: "https://www.facebook.com/profile.php?id=61590554395056" },
-  { name: "Instagram", icon: Instagram, href: "https://www.instagram.com/youases.official" },
-  { name: "Email", icon: Mail, href: "mailto:youases.official@gmail.com" },
-];
-
-function Contact() {
-  return (
-    <section id="contact" className="relative px-5 sm:px-8 py-20">
-      <div className="max-w-4xl mx-auto text-center">
-        <div className="text-xs tracking-[0.25em] uppercase text-primary font-medium">Follow Us</div>
-        <h3 className="mt-4 text-3xl sm:text-4xl font-semibold tracking-tight" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
-          Join the <span className="text-gradient">YouAses</span> journey.
-        </h3>
-        <div className="mt-8 flex items-center justify-center gap-4">
-          {socials.map((s) => (
-            <a
-              key={s.name}
-              href={s.href}
-              target="_blank"
-              rel="noreferrer"
-              aria-label={s.name}
-              className="h-12 w-12 rounded-full glass flex items-center justify-center text-muted-foreground hover:text-primary hover:border-primary/40 hover:shadow-[0_0_20px_oklch(0.72_0.18_250/0.5)] transition-all"
-            >
-              <s.icon size={18} />
-            </a>
-          ))}
-        </div>
-        <p className="mt-8 text-sm text-muted-foreground">
-          Contact:{" "}
-          <a href="mailto:youases.official@gmail.com" className="text-foreground hover:text-primary transition-colors">
-            youases.official@gmail.com
-          </a>
-        </p>
-      </div>
-    </section>
-  );
-}
-
 function Footer() {
   return (
-    <footer className="relative px-5 sm:px-8 py-10 border-t border-border/40">
-      <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
-        <a href="#home" className="flex items-center gap-2.5">
-          <img src={logo} alt="YouAses" className="h-8 w-8 object-contain drop-shadow-[0_0_6px_oklch(0.7_0.22_250/0.6)]" />
-          <span className="text-base font-semibold" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
-            You<span className="text-primary">Ases</span>
+    <footer className="border-t border-white/10 px-5 py-8 sm:px-8">
+      <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 text-xs text-slate-500 sm:flex-row">
+        <div className="flex items-center gap-2">
+          <img src={logo} alt="" className="h-6 w-6 rounded-lg" />
+          <span className="font-display font-semibold text-slate-300">
+            YouAses
           </span>
-        </a>
-        <p className="text-xs text-muted-foreground">© {new Date().getFullYear()} YouAses. All rights reserved.</p>
-        <a href="mailto:youases.official@gmail.com" className="text-xs text-muted-foreground hover:text-primary transition-colors">
-          youases.official@gmail.com
+        </div>
+        <span>© {new Date().getFullYear()} YouAses. Because you are Aces.</span>
+        <a
+          href="mailto:youases.official@gmail.com"
+          className="transition hover:text-primary"
+        >
+          Say hello →
         </a>
       </div>
     </footer>

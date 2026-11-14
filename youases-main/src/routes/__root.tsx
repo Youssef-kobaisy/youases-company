@@ -15,7 +15,9 @@ function NotFoundComponent() {
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
       <div className="max-w-md text-center">
         <h1 className="text-7xl font-bold text-foreground">404</h1>
-        <h2 className="mt-4 text-xl font-semibold text-foreground">Page not found</h2>
+        <h2 className="mt-4 text-xl font-semibold text-foreground">
+          Page not found
+        </h2>
         <p className="mt-2 text-sm text-muted-foreground">
           The page you're looking for doesn't exist or has been moved.
         </p>
@@ -32,7 +34,13 @@ function NotFoundComponent() {
   );
 }
 
-function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
+function ErrorComponent({
+  error,
+  reset,
+}: {
+  error: unknown;
+  reset: () => void;
+}) {
   console.error(error);
   const router = useRouter();
 
@@ -43,7 +51,8 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
           This page didn't load
         </h1>
         <p className="mt-2 text-sm text-muted-foreground">
-          Something went wrong on our end. You can try refreshing or head back home.
+          Something went wrong on our end. You can try refreshing or head back
+          home.
         </p>
         <div className="mt-6 flex flex-wrap justify-center gap-2">
           <button
@@ -67,39 +76,66 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
   );
 }
 
-export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
-  head: () => ({
-    meta: [
-      { charSet: "utf-8" },
-      { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "YouAses — Building the future of digital innovation" },
-      { name: "description", content: "YouAses is a modern technology company building intelligent digital solutions, AI, and software for the next generation." },
-      { name: "author", content: "YouAses" },
-      { property: "og:title", content: "YouAses — Building the future of digital innovation" },
-      { property: "og:description", content: "YouAses is a modern technology company building intelligent digital solutions, AI, and software for the next generation." },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary" },
-      { name: "twitter:site", content: "@YouAses" },
-      { name: "twitter:title", content: "YouAses — Building the future of digital innovation" },
-      { name: "twitter:description", content: "YouAses is a modern technology company building intelligent digital solutions, AI, and software for the next generation." },
-      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/8a1ff064-47a6-4a9f-93a5-6df4d5942c13/id-preview-9a876c70--35a5639e-8371-443c-b3c5-f3b144963f9d.lovable.app-1779898479693.png" },
-      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/8a1ff064-47a6-4a9f-93a5-6df4d5942c13/id-preview-9a876c70--35a5639e-8371-443c-b3c5-f3b144963f9d.lovable.app-1779898479693.png" },
-    ],
-    links: [
-      {
-        rel: "stylesheet",
-        href: appCss,
-      },
-      { rel: "preconnect", href: "https://fonts.googleapis.com" },
-      { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
-      { rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" },
-    ],
-  }),
-  shellComponent: RootShell,
-  component: RootComponent,
-  notFoundComponent: NotFoundComponent,
-  errorComponent: ErrorComponent,
-});
+export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
+  {
+    head: () => ({
+      meta: [
+        { charSet: "utf-8" },
+        { name: "viewport", content: "width=device-width, initial-scale=1" },
+        { title: "YouAses | Technology for the next leap" },
+        {
+          name: "description",
+          content:
+            "YouAses builds intelligent products and meaningful digital experiences for a better future.",
+        },
+        { name: "author", content: "YouAses" },
+        {
+          property: "og:title",
+          content: "YouAses | Technology for the next leap",
+        },
+        {
+          property: "og:description",
+          content:
+            "YouAses builds intelligent products and meaningful digital experiences for a better future.",
+        },
+        { property: "og:type", content: "website" },
+        { name: "twitter:card", content: "summary" },
+        { name: "twitter:site", content: "@YouAses" },
+        {
+          name: "twitter:title",
+          content: "YouAses | Technology for the next leap",
+        },
+        {
+          name: "twitter:description",
+          content:
+            "YouAses builds intelligent products and meaningful digital experiences for a better future.",
+        },
+        { property: "og:image", content: "https://youases.work/og-image.png" },
+        { name: "twitter:image", content: "https://youases.work/og-image.png" },
+      ],
+      links: [
+        {
+          rel: "stylesheet",
+          href: appCss,
+        },
+        { rel: "preconnect", href: "https://fonts.googleapis.com" },
+        {
+          rel: "preconnect",
+          href: "https://fonts.gstatic.com",
+          crossOrigin: "anonymous",
+        },
+        {
+          rel: "stylesheet",
+          href: "https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap",
+        },
+      ],
+    }),
+    shellComponent: RootShell,
+    component: RootComponent,
+    notFoundComponent: NotFoundComponent,
+    errorComponent: ErrorComponent,
+  },
+);
 
 function RootShell({ children }: { children: React.ReactNode }) {
   return (
