@@ -203,6 +203,41 @@
       rgba(255, 255, 255, 0.025)
     );
   }
+  .journal-card {
+    min-height: 430px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 2rem;
+    padding: 1.75rem;
+    background: linear-gradient(145deg, #0b1932, rgba(255, 255, 255, 0.025));
+    transition:
+      transform 0.45s ease,
+      border-color 0.45s ease,
+      background 0.45s ease;
+  }
+  .journal-card:nth-child(2) {
+    background: linear-gradient(145deg, #17143d, rgba(255, 255, 255, 0.025));
+  }
+  .journal-card:nth-child(3) {
+    background: linear-gradient(145deg, #073d4d, rgba(255, 255, 255, 0.025));
+  }
+  .journal-card:hover {
+    transform: translateY(-7px);
+    border-color: rgba(130, 170, 255, 0.5);
+  }
+  .article-rule {
+    height: 1px;
+    background: linear-gradient(90deg, rgba(130, 170, 255, 0.8), transparent);
+  }
+  .article-cta {
+    border: 1px solid rgba(130, 170, 255, 0.28);
+    background:
+      radial-gradient(
+        circle at 85% 20%,
+        rgba(80, 145, 255, 0.2),
+        transparent 35%
+      ),
+      #091226;
+  }
   .eyebrow {
     color: #82aaff;
     font-size: 0.68rem;
@@ -312,6 +347,9 @@
     padding: 2.5rem;
   }
   .focus-card {
+    padding: 2.5rem;
+  }
+  .journal-card {
     padding: 2.5rem;
   }
 }

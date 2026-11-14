@@ -56,7 +56,9 @@ export default function App() {
   }
   const page = ["/company", "/platforms", "/journal", "/contact"].includes(path)
     ? path
-    : "/";
+    : path.startsWith("/journal/")
+      ? "/journal-article"
+      : "/";
 
   return (
     <div className="min-h-screen overflow-hidden bg-[#050b18] text-white">
@@ -70,7 +72,10 @@ export default function App() {
         {page === "/" && <HomePage navigate={navigate} />}
         {page === "/company" && <CompanyPage navigate={navigate} />}
         {page === "/platforms" && <PlatformsPage navigate={navigate} />}
-        {page === "/journal" && <JournalPage />}
+        {page === "/journal" && <JournalPage navigate={navigate} />}
+        {page === "/journal-article" && (
+          <JournalArticlePage path={path} navigate={navigate} />
+        )}
         {page === "/contact" && <Invitation />}
       </main>
       <Footer />
@@ -269,7 +274,83 @@ function PlatformsPage({ navigate }: { navigate: (to: string) => void }) {
   );
 }
 
-function JournalPage() {
+const journalArticles = [
+  {
+    slug: "why-we-are-building-y-note",
+    category: "Product signal",
+    number: "01",
+    title: "We are building a doorway to knowledge.",
+    excerpt:
+      "Y-note began with a question: what if the next generation of software did more than store what you know?",
+    intro:
+      "The internet gave the world access to more information than any generation before it. The next challenge is not access. It is making meaning from the enormous amount already around us.",
+    sections: [
+      {
+        heading: "The problem is not a blank page",
+        copy: "Most tools ask people to capture more, organise more, and remember more. But a growing archive is not the same as a growing mind. We believe software should help ideas meet, evolve, and become useful at the moment they matter.",
+      },
+      {
+        heading: "A different kind of beginning",
+        copy: "Y-note is being shaped around the space between a thought and its next possibility. We are exploring an environment that can recognise context, surface relationships, and make discovery feel natural — without turning curiosity into another task list.",
+      },
+      {
+        heading: "The first signal is coming",
+        copy: "We are still building the pieces that make the experience feel unmistakably YouAses. We are not ready to reveal every door yet. For now, know this: Y-note is being made for people who do not want to leave their best ideas behind.",
+      },
+    ],
+  },
+  {
+    slug: "the-human-side-of-ai",
+    category: "Point of view",
+    number: "02",
+    title: "The future of AI will be measured by what it gives back.",
+    excerpt:
+      "At YouAses, we are not interested in making intelligence feel louder. We are interested in making people feel more capable.",
+    intro:
+      "Artificial intelligence is often described through scale: larger models, faster answers, more automation. Those things matter. But they are not the measure we care about most.",
+    sections: [
+      {
+        heading: "Capability without clarity is friction",
+        copy: "A powerful system can still leave people overwhelmed. Our work starts with a more human question: does this technology help someone see the situation more clearly, make a better decision, or move from intention to action?",
+      },
+      {
+        heading: "Design is part of the intelligence",
+        copy: "Trust is not added after the model is built. It is shaped through language, restraint, transparent behaviour, and interfaces that respect attention. We bring engineering and product thinking together because intelligence only matters when it can be understood.",
+      },
+      {
+        heading: "Building with a long horizon",
+        copy: "YouAses is building for more than a launch moment. We want our products to become dependable layers in the way people learn, create, and work — technology that expands agency rather than quietly taking it away.",
+      },
+    ],
+  },
+  {
+    slug: "inside-the-youases-studio",
+    category: "Studio letter",
+    number: "03",
+    title:
+      "Inside the YouAses studio: from impossible questions to useful systems.",
+    excerpt:
+      "Every YouAses idea starts as a question about what people could do if technology understood the direction, not just the command.",
+    intro:
+      "YouAses is an independent technology company, but we think like a studio: curious at the beginning, rigorous in the middle, and ambitious about the final experience.",
+    sections: [
+      {
+        heading: "Start with the human tension",
+        copy: "Before a feature, a roadmap, or a name, we look for the tension people are already living with: too much information, too little context, or a promising idea trapped inside a difficult workflow.",
+      },
+      {
+        heading: "Make the invisible understandable",
+        copy: "Our work crosses artificial intelligence, software engineering, and product design. The goal is not to show how complicated the system is. The goal is to make the value feel immediate, clear, and worth returning to.",
+      },
+      {
+        heading: "A portfolio with a point of view",
+        copy: "The products we build will look different from one another, but they share a belief: technology should create momentum. That is the standard we are bringing to Y-note and everything that follows.",
+      },
+    ],
+  },
+];
+
+function JournalPage({ navigate }: { navigate: (to: string) => void }) {
   return (
     <>
       <PageIntro
@@ -283,9 +364,117 @@ function JournalPage() {
         }
         copy="The Journal explains what we are building, why it matters, and the questions shaping our approach to artificial intelligence, software, and knowledge."
       />
-      <News />
-      <JournalFeature />
+      <section className="journal-index px-5 pb-28 sm:px-8 sm:pb-40">
+        <div className="mx-auto max-w-[1400px]">
+          <div className="eyebrow">Read the signals</div>
+          <div className="mt-8 grid gap-5 lg:grid-cols-3">
+            {journalArticles.map((article) => (
+              <button
+                key={article.slug}
+                onClick={() => navigate(`/journal/${article.slug}`)}
+                className="journal-card text-left"
+              >
+                <div className="flex items-center justify-between text-[10px] uppercase tracking-[.2em] text-[#82aaff]">
+                  <span>{article.category}</span>
+                  <span>{article.number}</span>
+                </div>
+                <h2 className="mt-20 font-display text-3xl leading-[1.02] tracking-[-.04em]">
+                  {article.title}
+                </h2>
+                <p className="mt-5 text-sm leading-7 text-slate-400">
+                  {article.excerpt}
+                </p>
+                <span className="mt-10 inline-flex items-center gap-2 text-xs font-semibold text-slate-200">
+                  Read the full story <ArrowUpRight size={14} />
+                </span>
+              </button>
+            ))}
+          </div>
+        </div>
+      </section>
+      <JournalFeature navigate={navigate} />
     </>
+  );
+}
+
+function JournalArticlePage({
+  path,
+  navigate,
+}: {
+  path: string;
+  navigate: (to: string) => void;
+}) {
+  const slug = path.replace("/journal/", "");
+  const article = journalArticles.find((item) => item.slug === slug);
+
+  if (!article) {
+    return (
+      <PageIntro
+        eyebrow="Journal / 404"
+        title={
+          <>
+            This signal
+            <br />
+            <span className="text-gradient">has moved.</span>
+          </>
+        }
+        copy="The article you are looking for is not available, but there is more to discover in the YouAses Journal."
+      />
+    );
+  }
+
+  return (
+    <article className="journal-article px-5 pb-32 pt-44 sm:px-8 sm:pb-48">
+      <div className="mx-auto max-w-[1000px]">
+        <button
+          onClick={() => navigate("/journal")}
+          className="reveal inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[.2em] text-[#9fc3ff]"
+        >
+          <ArrowDownRight className="rotate-90" size={15} /> Back to Journal
+        </button>
+        <div className="reveal mt-14 eyebrow">
+          {article.category} / {article.number}
+        </div>
+        <h1 className="reveal mt-6 max-w-5xl font-display text-5xl font-medium leading-[.9] tracking-[-.07em] sm:text-8xl">
+          {article.title}
+        </h1>
+        <p className="reveal mt-10 max-w-3xl text-xl leading-9 text-slate-300 sm:text-2xl sm:leading-10">
+          {article.intro}
+        </p>
+        <div className="article-rule mt-16" />
+        <div className="mt-16 max-w-2xl space-y-14">
+          {article.sections.map((section, index) => (
+            <section key={section.heading} className="reveal">
+              <div className="font-mono text-xs text-[#82aaff]">
+                0{index + 1}
+              </div>
+              <h2 className="mt-4 font-display text-3xl tracking-[-.04em] sm:text-4xl">
+                {section.heading}
+              </h2>
+              <p className="mt-5 text-base leading-8 text-slate-400">
+                {section.copy}
+              </p>
+            </section>
+          ))}
+        </div>
+        <div className="article-cta mt-24 rounded-[2rem] p-8 sm:p-12">
+          <div className="eyebrow">Stay close to the next signal</div>
+          <h2 className="mt-5 max-w-2xl font-display text-3xl leading-tight tracking-[-.04em] sm:text-5xl">
+            The most interesting part is still ahead.
+          </h2>
+          <p className="mt-5 max-w-xl leading-8 text-slate-400">
+            Follow YouAses as we turn these ideas into products, platforms, and
+            experiences you can use.
+          </p>
+          <button
+            onClick={() => navigate("/contact")}
+            className="mt-8 inline-flex items-center gap-2 rounded-full bg-white px-6 py-3.5 text-sm font-bold text-[#071226] transition hover:bg-[#9ac7ff]"
+          >
+            Get the next signal <ArrowUpRight size={16} />
+          </button>
+        </div>
+      </div>
+    </article>
   );
 }
 
@@ -862,7 +1051,7 @@ function News() {
   );
 }
 
-function JournalFeature() {
+function JournalFeature({ navigate }: { navigate: (to: string) => void }) {
   return (
     <section className="journal-feature px-5 pb-28 sm:px-8 sm:pb-40">
       <div className="mx-auto max-w-[1400px]">
@@ -882,6 +1071,12 @@ function JournalFeature() {
               exploring how AI can recognize intent, protect attention, and make
               the right next step feel obvious.
             </p>
+            <button
+              onClick={() => navigate("/journal/the-human-side-of-ai")}
+              className="mt-8 inline-flex items-center gap-2 text-sm font-semibold text-[#9fc3ff]"
+            >
+              Read the point of view <ArrowUpRight size={16} />
+            </button>
           </article>
           <article className="feature-article feature-article-alt">
             <div className="flex items-center justify-between text-xs uppercase tracking-[.2em] text-cyan-200">
@@ -897,6 +1092,12 @@ function JournalFeature() {
               ideas are not isolated. They are connected, evolving, and waiting
               for the right system to bring them into focus.
             </p>
+            <button
+              onClick={() => navigate("/journal/why-we-are-building-y-note")}
+              className="mt-8 inline-flex items-center gap-2 text-sm font-semibold text-cyan-200"
+            >
+              Follow the idea <ArrowUpRight size={16} />
+            </button>
           </article>
         </div>
       </div>
