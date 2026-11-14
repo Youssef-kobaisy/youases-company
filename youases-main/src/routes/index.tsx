@@ -351,48 +351,97 @@ const journalArticles = [
 ];
 
 function JournalPage({ navigate }: { navigate: (to: string) => void }) {
+  const [featured, ...stories] = journalArticles;
   return (
     <>
       <PageIntro
-        eyebrow="YouAses Journal"
+        eyebrow="YouAses / Journal"
         title={
           <>
-            The ideas behind
+            A clear view of
             <br />
-            <span className="text-gradient">the work.</span>
+            <span className="text-gradient">what we are building.</span>
           </>
         }
-        copy="The Journal explains what we are building, why it matters, and the questions shaping our approach to artificial intelligence, software, and knowledge."
+        copy="The YouAses Journal is where we publish the thinking behind our company: the problems we are exploring, the products taking shape, and the ideas guiding our work in artificial intelligence and software."
       />
       <section className="journal-index px-5 pb-28 sm:px-8 sm:pb-40">
         <div className="mx-auto max-w-[1400px]">
-          <div className="eyebrow">Read the signals</div>
-          <div className="mt-8 grid gap-5 lg:grid-cols-3">
-            {journalArticles.map((article) => (
+          <div className="journal-featured">
+            <div className="max-w-2xl">
+              <div className="eyebrow">Featured / {featured.category}</div>
+              <h2 className="mt-6 font-display text-4xl leading-[.98] tracking-[-.05em] sm:text-6xl">
+                {featured.title}
+              </h2>
+              <p className="mt-6 text-lg leading-8 text-slate-300">
+                {featured.excerpt}
+              </p>
+              <button
+                onClick={() => navigate(`/journal/${featured.slug}`)}
+                className="mt-8 inline-flex items-center gap-2 rounded-full bg-white px-6 py-3.5 text-sm font-bold text-[#071226] transition hover:bg-[#9ac7ff]"
+              >
+                Read the feature <ArrowUpRight size={16} />
+              </button>
+            </div>
+            <div className="journal-featured-mark">
+              <img src={appIcon} alt="Y-note" />
+              <span>Y-note / First signal</span>
+            </div>
+          </div>
+          <div className="mt-20 flex items-end justify-between gap-6">
+            <div>
+              <div className="eyebrow">All stories</div>
+              <h2 className="mt-4 font-display text-3xl tracking-[-.04em] sm:text-5xl">
+                Ideas worth following.
+              </h2>
+            </div>
+            <span className="hidden text-sm text-slate-600 sm:block">
+              {stories.length} stories / more to come
+            </span>
+          </div>
+          <div className="mt-8 divide-y divide-white/10 border-y border-white/10">
+            {stories.map((article) => (
               <button
                 key={article.slug}
                 onClick={() => navigate(`/journal/${article.slug}`)}
-                className="journal-card text-left"
+                className="journal-row text-left"
               >
-                <div className="flex items-center justify-between text-[10px] uppercase tracking-[.2em] text-[#82aaff]">
-                  <span>{article.category}</span>
-                  <span>{article.number}</span>
+                <div className="font-mono text-xs text-[#82aaff]">
+                  {article.number}
                 </div>
-                <h2 className="mt-20 font-display text-3xl leading-[1.02] tracking-[-.04em]">
-                  {article.title}
-                </h2>
-                <p className="mt-5 text-sm leading-7 text-slate-400">
-                  {article.excerpt}
-                </p>
-                <span className="mt-10 inline-flex items-center gap-2 text-xs font-semibold text-slate-200">
-                  Read the full story <ArrowUpRight size={14} />
-                </span>
+                <div>
+                  <div className="text-[10px] uppercase tracking-[.2em] text-[#82aaff]">
+                    {article.category}
+                  </div>
+                  <h3 className="mt-3 font-display text-2xl tracking-[-.03em] sm:text-3xl">
+                    {article.title}
+                  </h3>
+                  <p className="mt-3 max-w-2xl text-sm leading-7 text-slate-500">
+                    {article.excerpt}
+                  </p>
+                </div>
+                <ArrowUpRight
+                  className="text-slate-500 transition group-hover:text-white"
+                  size={20}
+                />
               </button>
             ))}
           </div>
+          <div className="mt-20 grid gap-8 border-t border-white/10 pt-10 md:grid-cols-[1fr_auto] md:items-center">
+            <p className="max-w-2xl text-base leading-8 text-slate-500">
+              The Journal is not separate from the work. It is the clearest way
+              to follow how a YouAses question becomes a product, and how our
+              products become useful in the real world.
+            </p>
+            <button
+              onClick={() => navigate("/contact")}
+              className="inline-flex items-center gap-2 text-sm font-semibold text-[#9fc3ff]"
+            >
+              Stay close to the next release <ArrowUpRight size={16} />
+            </button>
+          </div>
         </div>
       </section>
-      <JournalFeature navigate={navigate} />
     </>
   );
 }
