@@ -13,12 +13,9 @@ import {
   MoveUpRight,
   Network,
   Orbit,
-  Play,
   Quote,
   Rocket,
-  Sparkles,
   X,
-  Zap,
 } from "lucide-react";
 import logo from "@/assets/youases-logo.png";
 import { useReveal } from "@/hooks/use-reveal";
@@ -100,79 +97,73 @@ function Nav({
   ];
   return (
     <>
-      <header className="side-rail fixed left-4 top-4 z-50 hidden h-[calc(100vh-2rem)] w-[76px] flex-col items-center justify-between rounded-[2rem] border border-white/10 bg-[#071226]/70 py-5 backdrop-blur-2xl lg:flex">
-        <button
-          onClick={() => navigate("/")}
-          className="flex flex-col items-center gap-2"
-        >
-          <img
-            src={logo}
-            alt="YouAses"
-            className="h-10 w-10 rounded-xl object-cover shadow-[0_0_30px_rgba(87,151,255,.4)]"
-          />
-          <span className="vertical-word">YouAses</span>
-        </button>
-        <nav className="flex flex-col items-center gap-4">
-          {links.map(([label, href], index) => (
-            <button
-              key={href}
-              onClick={() => navigate(href)}
-              className={`side-nav-link ${currentPath === href ? "side-nav-link-active" : ""}`}
-              aria-label={label}
-              title={label}
-            >
-              <span>0{index + 1}</span>
-            </button>
-          ))}
-        </nav>
-        <button
-          onClick={() => navigate("/contact")}
-          className="side-contact"
-          aria-label="Contact YouAses"
-        >
-          <Mail size={17} />
-        </button>
-      </header>
-      <header className="mobile-header fixed inset-x-4 top-4 z-50 flex items-center justify-between rounded-full border border-white/10 bg-[#071226]/80 px-4 py-3 backdrop-blur-2xl lg:hidden">
-        <button
-          onClick={() => navigate("/")}
-          className="flex items-center gap-3"
-        >
-          <img
-            src={logo}
-            alt="YouAses"
-            className="h-9 w-9 rounded-xl object-cover"
-          />
-          <span className="font-display text-lg font-bold">
-            You<span className="text-[#82aaff]">Ases</span>
-          </span>
-        </button>
-        <button
-          onClick={() => setMenuOpen(!menuOpen)}
-          className="rounded-full p-2 text-slate-200 sm:hidden"
-          aria-label="Toggle navigation"
-        >
-          {menuOpen ? <X size={21} /> : <Menu size={21} />}
-        </button>
-      </header>
+      <button
+        onClick={() => setMenuOpen(!menuOpen)}
+        className="menu-trigger fixed right-5 top-5 z-[60] flex items-center gap-3 rounded-full border border-white/15 bg-[#071226]/80 px-4 py-3 text-xs font-semibold uppercase tracking-[.18em] text-white backdrop-blur-xl sm:right-8 sm:top-8"
+        aria-label={menuOpen ? "Close menu" : "Open menu"}
+      >
+        <span>{menuOpen ? "Close" : "Menu"}</span>
+        {menuOpen ? <X size={17} /> : <Menu size={17} />}
+      </button>
       {menuOpen && (
-        <nav className="mobile-menu fixed inset-x-4 top-20 z-50 rounded-3xl border border-white/10 bg-[#071226]/95 p-3 backdrop-blur-xl lg:hidden">
-          {links.map(([label, href]) => (
-            <button
-              key={href}
-              onClick={() => navigate(href)}
-              className={`block w-full rounded-2xl px-4 py-3 text-left text-sm text-slate-300 hover:bg-white/5 ${currentPath === href ? "bg-white/5 text-white" : ""}`}
-            >
-              {label}
-            </button>
-          ))}
+        <div className="menu-overlay fixed inset-0 z-50">
           <button
-            onClick={() => navigate("/contact")}
-            className="mt-1 block w-full rounded-2xl bg-white px-4 py-3 text-left text-sm font-semibold text-[#071226]"
-          >
-            Start a conversation
-          </button>
-        </nav>
+            aria-label="Close menu"
+            onClick={() => setMenuOpen(false)}
+            className="absolute inset-0 cursor-default bg-[#020611]/75 backdrop-blur-sm"
+          />
+          <aside className="menu-panel absolute right-0 top-0 flex h-full w-full max-w-[430px] flex-col justify-between border-l border-white/10 bg-[#071226] p-7 pt-28 shadow-2xl sm:p-10 sm:pt-32">
+            <div>
+              <div className="flex items-center gap-3 border-b border-white/10 pb-7">
+                <img
+                  src={logo}
+                  alt="YouAses"
+                  className="h-11 w-11 rounded-xl object-cover"
+                />
+                <div>
+                  <div className="font-display text-xl font-bold">
+                    You<span className="text-[#82aaff]">Ases</span>
+                  </div>
+                  <div className="mt-1 text-[10px] uppercase tracking-[.25em] text-slate-500">
+                    Because you are Aces.
+                  </div>
+                </div>
+              </div>
+              <nav className="mt-10 flex flex-col">
+                {links.map(([label, href], index) => (
+                  <button
+                    key={href}
+                    onClick={() => navigate(href)}
+                    className={`menu-link ${currentPath === href ? "menu-link-active" : ""}`}
+                  >
+                    <span className="font-mono text-xs text-[#82aaff]">
+                      0{index + 1}
+                    </span>
+                    <span>{label}</span>
+                    <ArrowUpRight size={18} />
+                  </button>
+                ))}
+                <button
+                  onClick={() => navigate("/contact")}
+                  className="menu-link menu-link-contact"
+                >
+                  <span className="font-mono text-xs">04</span>
+                  <span>Start a conversation</span>
+                  <Mail size={18} />
+                </button>
+              </nav>
+            </div>
+            <div className="border-t border-white/10 pt-6 text-sm leading-7 text-slate-500">
+              Independent technology company
+              <br />
+              AI, software & knowledge platforms
+              <br />
+              <a href="mailto:hello@youases.work" className="text-[#9fc3ff]">
+                hello@youases.work
+              </a>
+            </div>
+          </aside>
+        </div>
       )}
     </>
   );
@@ -183,6 +174,7 @@ function HomePage({ navigate }: { navigate: (to: string) => void }) {
     <>
       <Hero navigate={navigate} />
       <HomeIntro navigate={navigate} />
+      <HomeFocus />
       <YNote navigate={navigate} />
       <NewsPreview navigate={navigate} />
       <Invitation />
@@ -299,6 +291,44 @@ function HomeIntro({ navigate }: { navigate: (to: string) => void }) {
           >
             Meet the company <ArrowUpRight size={16} />
           </button>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function HomeFocus() {
+  const items = [
+    [
+      "01",
+      "Understand",
+      "We turn complex information into systems people can actually navigate.",
+    ],
+    [
+      "02",
+      "Augment",
+      "We build AI that extends human judgment instead of replacing the human point of view.",
+    ],
+    [
+      "03",
+      "Advance",
+      "We create software with the ambition to move industries, not just screens.",
+    ],
+  ];
+  return (
+    <section className="home-focus px-5 py-20 sm:px-8 sm:py-28">
+      <div className="mx-auto max-w-[1400px]">
+        <div className="eyebrow">How we create value</div>
+        <div className="mt-8 grid gap-px overflow-hidden rounded-3xl border border-white/10 bg-white/10 md:grid-cols-3">
+          {items.map(([number, title, copy]) => (
+            <article key={number} className="focus-card">
+              <span className="font-mono text-xs text-[#82aaff]">{number}</span>
+              <h3 className="mt-14 font-display text-2xl">{title}</h3>
+              <p className="mt-4 max-w-xs text-sm leading-7 text-slate-500">
+                {copy}
+              </p>
+            </article>
+          ))}
         </div>
       </div>
     </section>

@@ -71,6 +71,57 @@
   .nav-link-active {
     color: white;
   }
+  .menu-trigger {
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.28);
+    transition:
+      background 0.25s ease,
+      border-color 0.25s ease,
+      transform 0.25s ease;
+  }
+  .menu-trigger:hover {
+    border-color: rgba(130, 170, 255, 0.55);
+    background: #10254a;
+    transform: translateY(-2px);
+  }
+  .menu-panel {
+    animation: menu-in 0.45s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+  .menu-link {
+    display: grid;
+    grid-template-columns: 2rem 1fr auto;
+    align-items: center;
+    gap: 1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 1.15rem 0;
+    color: #94a3b8;
+    font-family: "Space Grotesk", Inter, sans-serif;
+    font-size: 1.55rem;
+    text-align: left;
+    transition:
+      color 0.25s ease,
+      padding 0.25s ease;
+  }
+  .menu-link:hover,
+  .menu-link-active {
+    padding-left: 0.5rem;
+    color: white;
+  }
+  .menu-link-contact {
+    color: #82aaff;
+  }
+  .focus-card {
+    min-height: 240px;
+    padding: 1.75rem;
+    background: #091226;
+    transition:
+      background 0.35s ease,
+      transform 0.35s ease;
+  }
+  .focus-card:hover {
+    z-index: 1;
+    background: #10254a;
+    transform: translateY(-4px);
+  }
   .vertical-word {
     color: #64748b;
     font-family: "Space Grotesk", Inter, sans-serif;
@@ -259,6 +310,20 @@
   .story-card,
   .feature-article {
     padding: 2.5rem;
+  }
+  .focus-card {
+    padding: 2.5rem;
+  }
+}
+
+@keyframes menu-in {
+  from {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
   }
 }
 
